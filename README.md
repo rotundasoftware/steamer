@@ -1,9 +1,7 @@
 
-Streamline sending data to the client in your node.js applications.
-
 # ShipIt
 
-Now that our clients are thick and our servers are thin, one of the server's primary jobs is to bootstrap or relay data down to the client. ShipIt is an very tiny and flexible library that streamlines this process by leveraging the fact that it is more succinct and clear to declaratively list the data that should sent to the client than it is to imperatively load and send it.
+Now that our clients are thick and our servers are thin, one of the server's primary jobs is to bootstrap or relay data down to the client. ShipIt is an very tiny (about 100 lines of code) library that enables data to be loaded and sent to the client with less code and more clarity by switching from the imperative, manual approach to a declarative, automated one.
 
 ## Example
 
@@ -18,7 +16,6 @@ app.use( shipIt.middleware( [ {
 } ] ) );
 
 app.get( '/', function( req, res ) {
-
 	// Now req.ssData is supplied on every request by the shipIt middleware. Think of it as a "boat
 	// of data" that is organized into named containers. You supply the manifest (i.e. list of 
 	// contents) for each container, and then the data itself is automatically loaded for you.
@@ -49,3 +46,7 @@ html
 ```
 
 Now the array of contact data will automatically be available in the browser at `window.ssData.contacts`. Wasn't that easy!
+
+## Details
+
+Build 

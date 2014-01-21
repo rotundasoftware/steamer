@@ -1,12 +1,15 @@
 
-var _ = require( "underscore" );
-var async = require( "async" );
-var Class = require( "./class" );
+var _ = require( 'underscore' );
+var async = require( 'async' );
+var Class = require( './class' );
+
+var BaseContainer = require( './baseContainer' );
+var MongoCollectionContainer = require( './mongoCollectionContainer' );
 
 module.exports.middleware = function( containers, options ) {
 	options = _.defaults( {}, options, {
-		boatName : "ssData",
-		dumpLocation : "ssData"
+		boatName : 'ssData',
+		dumpLocation : 'ssData'
 	} );
 
 	var boatName = options.boatName;
@@ -38,13 +41,13 @@ module.exports.middleware = function( containers, options ) {
 				if( err ) return req.next( err );
 
 				var dumpLocationPointer;
-				var html = "";
+				var html = '';
 
-				dumpLocationPointer = "window." + dumpLocation;
-				html += "if( typeof " + dumpLocationPointer + " === \"undefined\" ) " + dumpLocationPointer + " = {}; ";
+				dumpLocationPointer = 'window.' + dumpLocation;
+				html += 'if( typeof ' + dumpLocationPointer + ' === "undefined" ) ' + dumpLocationPointer + ' = {}; ';
 
-				html += dumpLocationPointer + " = " + JSON.stringify( payload ) + ";";
-				html = "<script type='text/javascript'>" + html + "</script>";
+				html += dumpLocationPointer + ' = ' + JSON.stringify( payload ) + ';';
+				html = '<script type="text/javascript">' + html + '</script>';
 
 				res.locals[ boatName ] = html;
 
@@ -114,83 +117,5 @@ module.exports.Boat = Boat = Class.extend( {
 } );
 
 module.exports.Containers = {};
-
-module.exports.Containers.Base = BaseContainer = Class.extend( {
-	initialize : function() {
-		this._manifest = [];
-	},
-
-	add : function( item ) {
-		this._manifest.push( item );
-	},
-
-	reset : function() {
-		this._manifest = [];
-	}
-} );
-
-module.exports.Containers.MongoCollection = BaseContainer.extend( {
-	initialize : function( options ) {
-		this._collection = options.collection;
-
-		this._super( arguments );
-	},
-
-	stuff : function( callback ) {
-		var _this = this;
-		var recordsById = {};
-
-		async.each( this._manifest, function( thisSelector, callback ) {
-			thisSelector = _.extend( {
-				fields : [],
-				where : {},
-				filters : [],
-				skip : 0,
-				limit : 0
-			}, thisSelector );
-
-			var allConditions = [];
-			if( thisSelector.where ) allConditions.push( thisSelector.where );
-
-			var projection = {};
-
-			var mongoQuery = allConditions.length > 1 ? { $and : allConditions } : _.first( allConditions );
-			if( thisSelector.fields && thisSelector.fields !== "*" ) {
-				thisSelector.fields = _.union( thisSelector.fields, "_id" ); // _id field is mandatory
-				
-				_.each( thisSelector.fields, function( thisField ) {
-					projection[ thisField ] = true;
-				} );
-			}
-
-			var cursor = _this._collection.find( mongoQuery, projection );
-			cursor.toArray( function( err, records ) {
-				if( err ) return next( err );
-
-				// apply filter functions supplied in thisSelector.filters. allows for pseudo joins
-				_.each( thisSelector.filters, function( thisFilter ) {
-					records = _.filter( records, thisFilter );
-				} );
-
-				// apply skip and limit, now that filters have been applied
-				if( thisSelector.limit || thisSelector.skip )
-					records = records.splice( thisSelector.skip, thisSelector.limit );
-
-				_.each( records, function( thisRecord ) {
-					var recordId = thisRecord._id;
-
-					recordsById[ recordId ] = recordsById[ recordId ] || {};
-					_.extend( recordsById[ recordId ], thisRecord );
-				} );
-
-				callback();
-			} );
-		}, function( err ) {
-			if( err ) return callback( err );
-
-			// now all records are in recordsById, but we want the final payload to be an array
-			var containerContents = _.values( recordsById );
-			callback( null, containerContents );
-		} );
-	}
-} );
+module.exports.Containers.Base = BaseContainer;
+module.exports.Containers.MongoCollection = MongoCollectionContainer;
