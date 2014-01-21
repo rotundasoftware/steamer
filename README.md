@@ -45,10 +45,10 @@ html
 		// ...
 ```
 
-Now the array of contact data will automatically be available in the browser at `window.ssData.contacts`. Wasn't that easy!
+Now the array of contact data will be in the browser at `window.ssData.contacts`. Wasn't that easy!
 
 ## Details
 
-As you can tell, we are running with the shipping metaphor in this repo. The object you will be interfacing with on the server side is a ShipIt "boat". When you run through your server side logic, you will create a "manifest" for this boat, which details all the data that should be loaded and sent to the client. When you are finished, you will "stuff" the boat with its contents and send them down with the response. If you use the shitIt express middleware, the middleware will take care of both creating a shipIt boat for every request and also "stuffing" the boat automatically when `res.render` is called. 
+As you can tell, we are running with the shipping metaphor in this repo. The object you will be interfacing with on the server side is a ShipIt "boat". When you run through your server side logic, you will create a "manifest" for this boat, which declares all the data that should be loaded and sent to the client. When you are finished, you will "stuff" the boat with its contents and send them down with the response. The ShipIt express middleware provides an added level of convenience by both creating a ShipIt boat on every request object and also "stuffing" the boat automatically when `res.render` is called. 
 
 The ShipIt middleware creates a ShitIt "Boat" object on every request and attaches it to the express request object. 
