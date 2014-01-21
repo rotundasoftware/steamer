@@ -1,7 +1,7 @@
 
 # ShipIt
 
-Now that our clients are thick and our servers are thin, one of the server's primary jobs is to bootstrap or relay data down to the client. ShipIt is an very tiny (about 100 lines of code) library that enables data to be loaded and sent to the client with less code and more clarity by switching from the imperative, manual approach to a declarative, automated one.
+Now that our clients are thick and our servers are thin, one of the server's primary jobs is to bootstrap or relay data down to the client. ShipIt is an very tiny (≈ 100 lines) library that enables data to be loaded and sent to the client with less code and more clarity by switching from the imperative, manual approach to a declarative, automated one.
 
 ## Example
 
