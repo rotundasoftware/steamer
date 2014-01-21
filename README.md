@@ -1,19 +1,22 @@
 
 # ShipIt
 
-Now that our clients are thick and our servers are thin, one of the server's primary jobs is just to load data and then bootstrap or relay it to the client. ShipIt is an very tiny module that allows this task to be performed with less code and more clarity by switching the imperative, manual approach for a declarative, automated one.
+Now that our clients are thick and our servers are thin, one of the server's primary jobs is just to load data and then bootstrap or relay it to the client. ShipIt is an very tiny module that allows this task to be performed with less code and more clarity by switching up the imperative, manual approach for a declarative, automated one.
 
 ## Example
 
 
 ```javascript
 
-// install the shipIt middleware configured with a mongo collection container named 'contacts'
-app.use( shipIt.middleware( [ {
-	containerName : "contacts",
-	type : shipIt.Containers.MongoCollection,
-	options : { collection : mongoDb.collection( 'contacts' ) }
-} ] ) );
+// install the shipIt express middleware configured with a mongo collection container named 'contacts'
+app.use( shipIt.middleware( [ 
+	{
+		containerName : "contacts",
+		type : shipIt.Containers.MongoCollection,
+		options : { collection : mongoDb.collection( 'contacts' ) }
+	},
+	... // other "containers" here
+] ) );
 
 app.get( '/', function( req, res ) {
 	// Now req.ssData is supplied on every request by the shipIt middleware. Think of it as a "boat
