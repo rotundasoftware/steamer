@@ -1,0 +1,36 @@
+{
+  "name": "node.shitIp",
+  "description": "Easily collect and send data from the server to the client in your node.js applications.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Rotunda Software",
+    "email": "support@rotundasoftware.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rotundasoftware/shipIt.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rotundasoftware/shipIt.git"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/rotundasoftware/cartero/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "src/shipIt.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "keywords": [
+    "synchronization",
+    "node",
+    "express",
+	"middleware"
+  ],
+  "dependencies": {
+    "underscore": "~1.4.4",
+    "async": "*"
+  }
+}

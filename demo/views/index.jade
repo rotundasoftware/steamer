@@ -1,0 +1,10 @@
+doctype html5
+html
+	head
+		title "Example"
+		| !{ssData}
+	body
+		script.
+			document.write( JSON.stringify( window.ssData, null, '\t' )
+				.replace( /\n/g, '<br>' )
+				.replace( /\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;' ) );
