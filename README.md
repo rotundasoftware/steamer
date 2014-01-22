@@ -94,6 +94,7 @@ Because containers are in charge of managing their own manifests and loading the
 ssData.add( {
 	session : [ 'userId', 'permissions' ]
 } );
+
 ssData.stuff( function( err, payload ) {
 	// `payload.session` might now be a hash of the form
 	// { userId : 123, permissions : [ "read", "write" ] }
@@ -110,6 +111,8 @@ ssData.stuff( function( err, payload ) {
 ```
 
 ## Reference
+
+### Boat Methods
 
 #### `new Boat( containers )`
 
@@ -132,15 +135,15 @@ req.ssData.add( {
 
 #### `boat.reset()`
 
-Clears the boat's manifest by calling `container.clear()` on each container.
+Clears the boat's manifest by calling `container.reset()` on each container.
 
 #### `boat.stuff( callback )`
 
 Calls `stuff` on each of the boat's containers (in parallel), and `callback( err, payload )` when done, where `payload` is a hash of data keyed by container name (plus any "bulk cargo" entries).
 
-### Container reference
+### Defining containers
 
-Containers must implement three methods, `add`, `reset`, and `stuff`, which are all called by the corresponding `boat` methods. To define your own container type, simply define a class with these methods. Let's see how to implement a redis container like the one in the examples above.
+Steamer comes with a mongo collection container built in; it is up to you to define containers for other data sources. Containers must implement three methods, `add`, `reset`, and `stuff`, which are all called by the corresponding `boat` methods. Let's see how to implement a redis container like the one in the examples above.
 
 ```javascript
 RedisContainer = function( options ) {
