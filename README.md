@@ -114,10 +114,11 @@ RedisContainer = BaseContainer.extend( {
 
 	stuff : function( callback ) {
 		var keys = this._manifest;
-		async.map( keys, client.get, function( err, values ) {
+		async.map( keys, client.get, function( err, values ) {  // get values from redis
 			if( err ) return callback( err );
-			var payload = _.object( keys, values );
-			callback( null, payload );
+
+			var payload = _.object( keys, values ); // make a hash from our keys + values
+			callback( null, payload ); // return it as the stuffed contents of this container
 		}
 	},
 } );
