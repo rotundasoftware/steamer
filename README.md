@@ -138,7 +138,7 @@ Calls `stuff` on each of the boat's containers (in parallel), and `callback( err
 
 ### Container reference
 
-Containers have an initializer and three methods, `add`, `reset`, and `stuff`, which are analogous to the corresponding `boat` methods. Let's see how the redis container we used above might be implemented.
+Containers have an initializer and three methods, `add`, `reset`, and `stuff`, which are analogous to the corresponding `boat` methods. To define your own container type, simply define these methods. Let's see how easy it is to implement a redis container.
 
 ```javascript
 var steamer = require( 'steamer' );
@@ -146,18 +146,21 @@ var steamer = require( 'steamer' );
 RedisContainer = steamer.Containers.Base.extend( {
 	initialize : function( options ) {
 		// Called when a container is instantiated.
-		this._manifest = [];
+		this._keys = [];
 		this._client = options.client;  // Save a reference to our redis client.
 	},
 
-	add : function( keys ) {
+	add : function( item ) {
 		// Add an item (a key or array of keys) to our manifest.
-		this._manifest = this._manifest.concat( keys );
+		this._keys = this._manifest.concat( item );
+	},
+
+	reset : function() {
+		this._keys = [];
 	},
 
 	stuff : function( callback ) {
-		var keys = this._manifest;
-		async.map( keys, client.get, function( err, values ) {  // Get values from redis.
+		async.map( this._keys, client.get, function( err, values ) {  // Get values from redis.
 			if( err ) return callback( err );
 
 			var payload = _.object( keys, values );  // Make a hash from our keys + values.
