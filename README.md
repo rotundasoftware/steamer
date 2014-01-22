@@ -130,7 +130,7 @@ req.ssData.add( {
 
 #### `boat.reset()`
 
-Clears the boat's manifest.
+Clears the boat's manifest by calling `container.clear()` on each container.
 
 #### `boat.stuff( callback )`
 
@@ -138,7 +138,7 @@ Calls `stuff` on each of the boat's containers (in parallel), and `callback( err
 
 ### Container reference
 
-Containers have an initializer and three methods, `add`, `reset`, and `stuff`, which are analogous to the corresponding `boat` methods. It is easy to make your own container types. For instance, here is an implementation of the redis container we used above:
+Containers have an initializer and three methods, `add`, `reset`, and `stuff`, which are analogous to the corresponding `boat` methods. Let's see how the redis container we used above might be implemented.
 
 ```javascript
 var steamer = require( 'steamer' );
