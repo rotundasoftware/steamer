@@ -59,7 +59,7 @@ app.use( function( req, res, next ) {
 // and attach its payload to `res.locals[ xyz ]` when `res.render` is called.
 app.use( steamer.stuffMiddleware( 'ssData' ) );
 
-//** routes **/
+/***** routes *****/
 
 app.get( '/', function( req, res ) {
 	// Now as our logic for a given route executes, we just add items to our boat's manifest...
