@@ -60,7 +60,7 @@ Now the array of contact data will be in the browser at `window.ssData.contacts`
 
 As you can tell, the shipping metaphor runs deep in this repo. The object you will be interfacing with on the server side is a "boat". When you run through your server side logic, you will create a "manifest" for this boat, which declares all the data that should be loaded and sent to the client. When you are finished, you will "stuff" the boat with its contents and send them down with the response. The Steamer express middleware provides an added level of convenience by "stuffing" a boat automatically when `res.render` is called.
 
-Because containers are in charge of loading their own data (i.e. stuffing themselves), it is very easy to define your own container classes that load whatever kind of data you want using whatever declarative manifest makes the most sense given your data source. For example, you could easily define a redis container type that loads data by key name:
+Because containers are in charge of loading their own data (i.e. stuffing themselves), it is very easy to define your own container classes that use whatever declarative manifests make the most sense given your data source. For example, you could easily define a redis container type that loads data by key name:
 ```javascript
 req.ssData.add( {
 	session : [ 'userId', 'permissions' ]
