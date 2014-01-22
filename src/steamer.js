@@ -1,9 +1,7 @@
 
 var _ = require( 'underscore' );
 var async = require( 'async' );
-var Class = require( './class' );
 
-var BaseContainer = require( './baseContainer' );
 var MongoCollectionContainer = require( './mongoCollectionContainer' );
 
 module.exports.stuffMiddleware = function( boatName ) {
@@ -32,18 +30,14 @@ module.exports.stuffMiddleware = function( boatName ) {
 	};
 };
 
-module.exports.Boat = Boat = Class.extend( {
-	initialize : function( options ) {
-		var _this = this;
+module.exports.Boat = function( options ) {
+	this._containers = options.containers;
+	this._response = options.response;
+	this._consignee = options.consignee;
 
-		this._containers = options.containers;
-		this._response = options.response;
-		this._consignee = options.consignee;
+	this._bulkCargo = {};
 
-		this._bulkCargo = {};
-	},
-
-	add : function( itemsByContainer ) {
+	this.add = function( itemsByContainer ) {
 		var _this = this;
 
 		_.each( itemsByContainer, function( thisItem, thisContainerName ) {
@@ -52,17 +46,17 @@ module.exports.Boat = Boat = Class.extend( {
 			else
 				_this._bulkCargo[ thisContainerName ] = thisItem;
 		} );
-	},
+	};
 
-	reset : function() {
+	this.reset = function() {
 		_.each( this._containers, function( thisContainer ) {
 			thisContainer.reset();
 		} );
 
 		this._bulkCargo = {};
-	},
+	};
 
-	stuff : function( callback ) {
+	this.stuff = function( callback ) {
 		var _this = this;
 
 		// pack each container, get the results of the packing, 
@@ -81,9 +75,9 @@ module.exports.Boat = Boat = Class.extend( {
 
 			callback( null, _.extend( contentsByContainer, _this._bulkCargo ) );
 		} );
-	}
-} );
+	};
 
-module.exports.Containers = {};
-module.exports.Containers.Base = BaseContainer;
-module.exports.Containers.MongoCollection = MongoCollectionContainer;
+	return this;
+};
+
+module.exports.MongoCollectionContainer = MongoCollectionContainer;

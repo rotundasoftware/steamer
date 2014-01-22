@@ -16,7 +16,7 @@ prepareMongo( function( err, mongoDb ) {
 	app.use( function( req, res, next ) {
 		req.ssData = new steamer.Boat( {
 			containers : {
-				contacts : new steamer.Containers.MongoCollection( { collection : mongoDb.collection( 'contacts' ) } ),
+				contacts : new steamer.MongoCollectionContainer( { collection : mongoDb.collection( 'contacts' ) } ),
 			}
 		} );
 
@@ -29,12 +29,6 @@ prepareMongo( function( err, mongoDb ) {
 	app.use( app.router );
 
 	app.get( '/', function( req, res ) {
-		// req.darsy.add( {
-		// 	contacts : {
-		// 		fields : 'firstName'
-		// 	},
-		// 	bulk : 'whatever'
-		// } );
 
 		req.ssData.add( {
 			contacts : {
@@ -44,9 +38,13 @@ prepareMongo( function( err, mongoDb ) {
 			}
 		} );
 
-		// darsy.stuff( function( err, cargo ) {
-		// 	res.send( cargo );
-		// } );
+		req.ssData.add( {
+			contacts : {
+				fields : [ 'phone' ],
+				skip : 1,
+				limit : 2
+			}
+		} );
 
 		res.render( 'index' );
 	} );

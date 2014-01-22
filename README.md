@@ -138,37 +138,33 @@ Calls `stuff` on each of the boat's containers (in parallel), and `callback( err
 
 ### Container reference
 
-Containers have an initializer and three methods, `add`, `reset`, and `stuff`, which are analogous to the corresponding `boat` methods. To define your own container type, simply define a class with these methods. Let's see how easy it is to implement a redis container we used in the examples above.
+Containers must implement three methods, `add`, `reset`, and `stuff`, which are all called by the corresponding `boat` methods. To define your own container type, simply define a class with these methods. Let's see how to implement a redis container like the one in the examples above.
 
 ```javascript
-var Class = require( 'simple-class' );
-var steamer = require( 'steamer' );
+RedisContainer = function( options ) {
+	this._keys = [];
+	this._client = options.client;  // Save a reference to our redis client.
 
-RedisContainer = Class.extend( {
-	initialize : function( options ) {
-		// Called when a container is instantiated.
-		this._keys = [];
-		this._client = options.client;  // Save a reference to our redis client.
-	},
-
-	add : function( item ) {
+	this.add = function( item ) {
 		// Add an item (a key or array of keys) to our manifest.
 		this._keys = this._manifest.concat( item );
-	},
+	};
 
-	reset : function() {
+	this.reset = function() {
 		this._keys = [];
-	},
+	};
 
-	stuff : function( callback ) {
+	this.stuff : function( callback ) {
 		async.map( this._keys, client.get, function( err, values ) {  // Get values from redis.
 			if( err ) return callback( err );
 
 			var payload = _.object( keys, values );  // Make a hash from our keys + values.
 			callback( null, payload );  // Return it as the stuffed contents of this container.
 		}
-	},
-} );
+	};
+
+	return this;
+};
 ```
 Now we can initialize our boat with both a mongo container and a redis container:
 ```

@@ -1,20 +1,23 @@
 var _ = require( 'underscore' );
 var async = require( "async" );
-var Class = require( "./class" );
-var BaseContainer = require( "./baseContainer" );
 
-module.exports = BaseContainer.extend( {
-	initialize : function( options ) {
-		this._collection = options.collection;
+module.exports = function( options ) {
+	this._collection = options.collection;
+	this._selectors = [];
 
-		this._super( arguments );
-	},
+	this.add = function( item ) {
+		this._selectors.push( item );
+	};
 
-	stuff : function( callback ) {
+	this.reset = function() {
+		this._selectors = [];
+	};
+
+	this.stuff = function( callback ) {
 		var _this = this;
 		var recordsById = {};
 
-		async.each( this._manifest, function( thisSelector, callback ) {
+		async.each( this._selectors, function( thisSelector, callback ) {
 			thisSelector = _.extend( {
 				fields : [],
 				where : {},
@@ -69,5 +72,7 @@ module.exports = BaseContainer.extend( {
 			var containerContents = _.values( recordsById );
 			callback( null, containerContents );
 		} );
-	}
-} );
+	};
+
+	return this;
+};
