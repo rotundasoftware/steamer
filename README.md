@@ -70,11 +70,11 @@ req.ssData.add( {
 
 ```javascript
 req.ssData.add( {
-	contacts : {
+	contacts : {  // mongo collection container
 		fields : '*',
 		sort : { lastName : 1 }
 	}
-	session : [ 'userId', 'permissions' ],
+	session : [ 'userId', 'permissions' ], // redis container
 	pricingTable : require( "./data/pricingTable.json" ) // "bulk cargo"
 } );
 ```
