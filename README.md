@@ -104,7 +104,7 @@ Containers have an initializer and three methods, `add`, `reset`, and `stuff`, w
 ```javascript
 RedisContainer = BaseContainer.extend( {
 	initialize : function( options ) {
-		// called when a container is instantiated
+		// Called when a container is instantiated. Save a reference to our redis client
 		this._client = options.client;
 	},
 
