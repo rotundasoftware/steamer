@@ -79,7 +79,7 @@ req.ssData.add( {
 } );
 ```
 
-## Boat reference
+## Reference
 
 #### `new Boat( containers )`
 
@@ -97,7 +97,7 @@ Clear the boat's manifest.
 
 Calls `stuff` on each of the boat's containers (in parallel), and `callback( err, payload )` when done, where `payload` is a hash of data keyed by container name (plus any "bulk cargo" entries).
 
-## Container reference
+### Container reference
 
 Containers have an initializer and three methods, `add`, `reset`, and `stuff`, which are analogous (and called by) the corresponding `boat` methods. It is trivial to make your own container types. For instance, here is an implementation of the redis container described above:
 
