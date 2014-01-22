@@ -3,58 +3,90 @@
 
 In modern web applications, one of the server's primary jobs is to load data and then simply relay it to the client. This task can be accomplished with less code and more clarity using a declarative (as opposed to an imperative) approach. Steamer is an tiny module that facilitates loading and relaying data declaratively.
 
-## Example
+## Simplest example ever
+```javascript
+steamer = require( 'steamer' );
+// ...
+
+var ssData = new steamer.Boat( {  // Create a "boat". Boats are divided into containers that hold data.
+	containers : {  // Declare and instantiate the containers in this boat.
+		// We will be loading data from a mongo collection called 'contacts'.
+		contacts : new steamer.Containers.MongoCollection( {
+			collection : mongoDb.collection( 'contacts' )  // supply a reference to the mongo collection
+		} ),
+		// ... other "containers" go here
+	}
+} );
+
+ssData.add( {
+	contacts : {
+		// add the names of some contacts to the contact container's "manifest" (i.e. list of contents)
+		fields : [ 'firstName', 'lastName' ]
+		where : { 'active' : true } // standard mongo query
+		limit : 100
+	}
+} );
+
+// the `boat.stuff` method loads the data described by each container's manifest
+ssData.stuff( function( err, payload ) {
+	if( err ) throw err;
+
+	console.log( payload.contacts ); // Outputs loaded contact data
+} );
+```
+
+## Example using Express
 
 ```javascript
 // app.js
-// Create a Steamer "boat" for every request, divided into containers we will fill with data.
+// ...
+
+// Install some middleware to create a boat on every request object
+// with containers for our application's common data sources.
 app.use( function( req, res, next ) {
 	req.ssData = new steamer.Boat( {
 		containers : {
-			// We will be loading data from a mongo collection called 'contacts'.
 			contacts : new steamer.Containers.MongoCollection( {
 				collection : mongoDb.collection( 'contacts' )
 			} ),
-			... // other "containers" go here
+			// ...
 		}
 	} );
 
 	next();
 } );
 
-// Use the Steamer express middleware to automatically "stuff" our boat when we are done
+// The Steamer express middleware can be used to automatically stuff a boat at req[ xyz ]
+// and attach its payload to `res.locals[ xyz ]` when `res.render` is called.
 app.use( steamer.stuffMiddleware( 'ssData' ) );
 
 app.get( '/', function( req, res ) {
-	// As your logic for a given route executes, you may add to the manifest (i.e. list 
-	// of contents) that will be loaded into each "container" in your boat.
+	// Now as our logic for a given route executes, we just add items to our boat's manifest...
 	req.ssData.add( {
 		contacts : {
-			// add the names of the first 100 active contacts to the contact container's manifest
 			fields : [ 'firstName', 'lastName' ]
-			where : { 'active' : true } // standard mongo query
+			where : { 'active' : true }
 			limit : 100
 		}
 	} );
 
+	// ...and they will automatically be loaded for us and attached
+	// to `res.locals.ssData` when `res.render` is called
 	res.render( 'index.jade' );
 } );
 ```
-
-In index.jade
-
+So with a simple data dump in our layout template,
 ```jade
 doctype html5
 html
 	head
-		title 'Example'
 		script.
 			window.ssData = !{ JSON.stringify( ssData ) }
 	body
 		// ...
 ```
 
-Now the array of contact data will be in the browser at `window.ssData.contacts`. Wasn't that easy!
+The array of contact data will be in the browser at `window.ssData.contacts`. Wasn't that easy!
 
 ## Details
 

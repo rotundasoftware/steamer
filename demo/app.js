@@ -1,5 +1,5 @@
 var express = require( 'express' );
-var shipIt = require( '../src/shipIt' );
+var steamer = require( '../src/steamer' );
 var app = express();
 var mongo = require( 'mongodb' );
 var contactsJson = require( './contacts.json' );
@@ -12,19 +12,19 @@ prepareMongo( function( err, mongoDb ) {
 	app.set( 'views', __dirname + '/views');
 	app.set( 'view engine', 'jade');
 
-	// create a ShipIt "boat" for every request with a "mongo collection Container" named 'contacts'
+	// create a steamer "boat" for every request with a "mongo collection Container" named 'contacts'
 	app.use( function( req, res, next ) {
-		req.ssData = new shipIt.Boat( {
+		req.ssData = new steamer.Boat( {
 			containers : {
-				contacts : new shipIt.Containers.MongoCollection( { collection : mongoDb.collection( 'contacts' ) } ),
+				contacts : new steamer.Containers.MongoCollection( { collection : mongoDb.collection( 'contacts' ) } ),
 			}
 		} );
 
 		next();
 	} );
 
-	// use the ShipIt express middleware to automatically stuff our boat on render
-	app.use( shipIt.stuffMiddleware( "ssData" ) );
+	// use the steamer express middleware to automatically stuff our boat on render
+	app.use( steamer.stuffMiddleware( "ssData" ) );
 
 	app.use( app.router );
 
@@ -58,7 +58,7 @@ function prepareMongo( callback ) {
 	mongoClient.connect( MONGO_URI, {}, function( err, dbServer ) {
 		if( err ) throw err;
 
-		var mongoDb = dbServer.db( 'shipItTest' );
+		var mongoDb = dbServer.db( 'steamerTest' );
 
 		mongoDb.dropDatabase( function( err ) {
 			if( err ) return callback( err );
