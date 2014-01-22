@@ -74,7 +74,7 @@ app.get( '/', function( req, res ) {
 	res.render( 'index.jade' );
 } );
 ```
-So with a simple data dump, which we can do in our layout template,
+So with a simple JSON dump, which we can do in our layout template,
 ```jade
 doctype html5
 html
