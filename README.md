@@ -143,7 +143,7 @@ Calls `stuff` on each of the boat's containers (in parallel), and `callback( err
 
 ### Defining containers
 
-Steamer only comes with a mongo collection container built in but you can easily define containers for other data sources. Containers must implement three methods, `add`, `reset`, and `stuff`, which are all called by the corresponding `boat` methods. Let's see how to implement a redis container like the one in the examples above.
+Steamer only comes with a mongo collection container built in but you can easily define containers for other data sources. Containers must implement three methods, `add`, `reset`, and `stuff`, which are called by the corresponding `boat` methods. Let's see how to implement a redis container like the one we used above.
 
 ```javascript
 RedisContainer = function( options ) {
