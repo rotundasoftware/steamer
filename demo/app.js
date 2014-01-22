@@ -8,21 +8,23 @@ var MONGO_URI = 'mongodb://localhost';
 
 var mongoClient = mongo.MongoClient;
 
-
-
 prepareMongo( function( err, mongoDb ) {
 	app.set( 'views', __dirname + '/views');
 	app.set( 'view engine', 'jade');
 
-	// app.use( shipIt.middleware( {
-	// 	contacts : new shipIt.Containers.MongoCollection( { collection : mongoDb.collection( 'contacts' ) } )
-	// } ) );
+	// create a ShipIt "boat" for every request with a "mongo collection Container" named 'contacts'
+	app.use( function( req, res, next ) {
+		req.ssData = new shipIt.Boat( {
+			containers : {
+				contacts : new shipIt.Containers.MongoCollection( { collection : mongoDb.collection( 'contacts' ) } ),
+			}
+		} );
 
-	app.use( shipIt.middleware( [ {
-		containerName : 'contacts',
-		type : shipIt.Containers.MongoCollection,
-		options : { collection : mongoDb.collection( 'contacts' ) }
-	} ] ) );
+		next();
+	} );
+
+	// use the ShipIt express middleware to automatically stuff our boat on render
+	app.use( shipIt.stuffMiddleware( "ssData" ) );
 
 	app.use( app.router );
 

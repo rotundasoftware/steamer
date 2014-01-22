@@ -19,6 +19,7 @@ module.exports = BaseContainer.extend( {
 				fields : [],
 				where : {},
 				filters : [],
+				sort : null,
 				skip : 0,
 				limit : 0
 			}, thisSelector );
@@ -38,6 +39,8 @@ module.exports = BaseContainer.extend( {
 			}
 
 			var cursor = _this._collection.find( mongoQuery, projection );
+			if( thisSelector.sort ) cursor.sort( thisSelector.sort );
+			
 			cursor.toArray( function( err, records ) {
 				if( err ) return next( err );
 

@@ -6,25 +6,8 @@ var Class = require( './class' );
 var BaseContainer = require( './baseContainer' );
 var MongoCollectionContainer = require( './mongoCollectionContainer' );
 
-module.exports.middleware = function( containers, options ) {
-	options = _.defaults( {}, options, {
-		boatName : 'ssData',
-		dumpLocation : 'ssData'
-	} );
-
-	var boatName = options.boatName;
-	var dumpLocation = options.dumpLocation;
-
+module.exports.stuffMiddleware = function( boatName ) {
 	return function( req, res, next ) {
-		var containerInstaces = {};
-		_.each( containers, function( thisContainer ) {
-			containerInstaces[ thisContainer.containerName ] = new thisContainer.type( thisContainer.options );
-		} );
-
-		var boat = req[ boatName ] = new Boat( {
-			containers : containerInstaces
-		} );
-
 		var oldRender = res.render;
 
 		// override the render function on the response object to send down bootstrap data, and then
@@ -37,19 +20,19 @@ module.exports.middleware = function( containers, options ) {
 			var req = this.req;
 			var renderArgs = arguments;
 
-			boat.stuff( function( err, payload ) {
+			req[ boatName ].stuff( function( err, payload ) {
 				if( err ) return req.next( err );
 
-				var dumpLocationPointer;
-				var html = '';
+				// var dumpLocationPointer;
+				// var html = '';
 
-				dumpLocationPointer = 'window.' + dumpLocation;
-				html += 'if( typeof ' + dumpLocationPointer + ' === "undefined" ) ' + dumpLocationPointer + ' = {}; ';
+				// dumpLocationPointer = 'window.' + dumpLocation;
+				// html += 'if( typeof ' + dumpLocationPointer + ' === "undefined" ) ' + dumpLocationPointer + ' = {}; ';
 
-				html += dumpLocationPointer + ' = ' + JSON.stringify( payload ) + ';';
-				html = '<script type="text/javascript">' + html + '</script>';
+				// html += dumpLocationPointer + ' = ' + JSON.stringify( payload ) + ';';
+				// html = '<script type="text/javascript">' + html + '</script>';
 
-				res.locals[ boatName ] = html;
+				res.locals[ boatName ] = payload;
 
 				oldRender.apply( res, renderArgs );
 			} );
