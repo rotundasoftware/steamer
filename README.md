@@ -128,7 +128,9 @@ Now we can initialize our boat with both containers:
 app.use( function( req, res, next ) {
 	req.ssData = new steamer.Boat( {
 		containers : {
-			contacts : new steamer.Containers.MongoCollection( { collection : mongoDb.collection( 'contacts' ) } ),
+			contacts : new steamer.Containers.MongoCollection( {
+				collection : mongoDb.collection( 'contacts' )
+			} ),
 			session : new RedisContainer( { client : redisClient } );
 		}
 	} );
@@ -136,3 +138,5 @@ app.use( function( req, res, next ) {
 	next();
 } );
 ```
+
+Easy.
