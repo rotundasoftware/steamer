@@ -106,9 +106,9 @@ var steamer = require( 'steamer' );
 
 RedisContainer = steamer.Containers.Base.extend( {
 	initialize : function( options ) {
-		// Called when a container is instantiated. Save a reference to our redis client.
+		// Called when a container is instantiated.
 		this._manifest = [];
-		this._client = options.client;
+		this._client = options.client;  // Save a reference to our redis client.
 	},
 
 	add : function( keys ) {
@@ -121,8 +121,8 @@ RedisContainer = steamer.Containers.Base.extend( {
 		async.map( keys, client.get, function( err, values ) {  // Get values from redis.
 			if( err ) return callback( err );
 
-			var payload = _.object( keys, values ); // Make a hash from our keys + values.
-			callback( null, payload ); // Return it as the stuffed contents of this container.
+			var payload = _.object( keys, values );  // Make a hash from our keys + values.
+			callback( null, payload );  // Return it as the stuffed contents of this container.
 		}
 	},
 } );
