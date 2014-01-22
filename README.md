@@ -11,7 +11,7 @@ In modern web applications, one of the server's primary jobs is to load data and
 app.use( function( req, res, next ) {
 	req.ssData = new steamer.Boat( {
 		containers : {
-			// We will be loading data from a mongo collection called 'contacts'
+			// We will be loading data from a mongo collection called 'contacts'.
 			contacts : new steamer.Containers.MongoCollection( {
 				collection : mongoDb.collection( 'contacts' )
 			} ),
@@ -87,7 +87,7 @@ Creates a new boat. `containers` is a hash of named containers.
 
 #### `boat.add( itemsByContainer )`
 
-Adds items to the boat's manifest. `itemsByContainer` is a hash of items to add, keyed by container name. The boat calls the `add` method on each container with the supplied item for that container. (Therefore it is ultimately the container that determines how to add the item to its own manifest). Keys that do not correspond to any container are treated as "bulk cargo", meaning they are passed through to the client without transformation.
+Adds items to the boat's manifest. `itemsByContainer` is a hash of items to add, keyed by container name. The boat calls the `add` method on each container with the supplied item for that container. (Therefore it is ultimately the container that determines how to add its item to its own manifest). Keys that do not correspond to any container are treated as "bulk cargo", meaning they are passed through to the client without transformation.
 
 #### `boat.reset()`
 
@@ -106,7 +106,7 @@ var steamer = require( 'steamer' );
 
 RedisContainer = steamer.Containers.Base.extend( {
 	initialize : function( options ) {
-		// Called when a container is instantiated. Save a reference to our redis client
+		// Called when a container is instantiated. Save a reference to our redis client.
 		this._client = options.client;
 	},
 
@@ -116,11 +116,11 @@ RedisContainer = steamer.Containers.Base.extend( {
 
 	stuff : function( callback ) {
 		var keys = this._manifest;
-		async.map( keys, client.get, function( err, values ) {  // get values from redis
+		async.map( keys, client.get, function( err, values ) {  // Get values from redis.
 			if( err ) return callback( err );
 
-			var payload = _.object( keys, values ); // make a hash from our keys + values
-			callback( null, payload ); // return it as the stuffed contents of this container
+			var payload = _.object( keys, values ); // Make a hash from our keys + values.
+			callback( null, payload ); // Return it as the stuffed contents of this container.
 		}
 	},
 } );
