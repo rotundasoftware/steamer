@@ -31,11 +31,11 @@ ssData.add( {
 ssData.stuff( function( err, payload ) {
 	if( err ) throw err;
 
-	console.log( payload.contacts ); // Outputs names of first 100 active contacts
+	console.log( payload.contacts ); // Contains names of first 100 active contacts
 } );
 ```
 
-## Example using Express
+## Example usage with Express
 
 ```javascript
 // app.js
@@ -101,11 +101,11 @@ ssData.add( {
 	session : [ 'userId', 'permissions' ]
 } );
 ssData.stuff( function( err, payload ) {
-	// `payload.session` is a a hash of the form
+	// `payload.session` is now a hash of the form
 	// { userId : 123, permissions : [ "read", "write" ] }
 } )
 ```
-Also, containers can structure their payload with consideration to how it will be consumed. For example, Steamer's built in mongo collection container will merge fields from multiple manifest items, and ensure the `_id` field is supplied with each record:
+Also, since containers generate their own payload, they can structure it with consideration for how it will be consumed. For example, Steamer's built in mongo collection container will merge fields from multiple manifest items, and ensure the `_id` field is supplied with each record:
 ```javascript
 ssData.add( { contacts : [ 'firstName' ] } );
 ssData.add( { contacts : [ 'lastName' ] } );
