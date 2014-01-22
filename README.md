@@ -22,7 +22,7 @@ app.use( function( req, res, next ) {
 	next();
 } );
 
-// use the Steamer express middleware to automatically "stuff" our boat when we are done (optional)
+// use the Steamer express middleware to automatically "stuff" our boat when we are done
 app.use( steamer.stuffMiddleware( 'ssData' ) );
 
 app.get( '/', function( req, res ) {
