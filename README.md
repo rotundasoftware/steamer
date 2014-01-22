@@ -27,7 +27,7 @@ ssData.add( {
 	}
 } );
 
-// the `boat.stuff` method loads the data described by each container's manifest
+// the `boat.stuff()` method loads the data described by each container's manifest
 ssData.stuff( function( err, payload ) {
 	if( err ) throw err;
 
@@ -64,14 +64,6 @@ app.get( '/', function( req, res ) {
 	req.ssData.add( {
 		contacts : {
 			fields : [ 'firstName', 'lastName' ]
-		}
-	} );
-
-	// ...
-
-	req.ssData.add( {
-		contacts : {
-			fields : [ 'phone' ]  /
 		}
 	} );
 
