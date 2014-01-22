@@ -8,13 +8,13 @@ In modern web applications, one of the server's primary jobs is to load data and
 steamer = require( 'steamer' );
 // ...
 
-var ssData = new steamer.Boat( {  // Boats are divided into containers that hold data.
+var ssData = new steamer.Boat( {  // Boats are divided into "containers" that hold data.
 	containers : {  // Declare and instantiate the containers in this boat.
 		// We will be loading data from a mongo collection called 'contacts'.
-		contacts : new steamer.Containers.MongoCollection( {
+		contacts : new steamer.MongoCollectionContainer( {
 			collection : db.collection( 'contacts' )  // supply a reference to the collection
 		} ),
-		// ... other "containers" go here
+		// ... other containers go here
 	}
 } );
 
@@ -46,7 +46,7 @@ ssData.stuff( function( err, payload ) {
 app.use( function( req, res, next ) {
 	req.ssData = new steamer.Boat( {  // same as above
 		containers : {
-			contacts : new steamer.Containers.MongoCollection( {
+			contacts : new steamer.MongoCollectionContainer( {
 				collection : db.collection( 'contacts' )
 			} )
 		}
@@ -58,6 +58,8 @@ app.use( function( req, res, next ) {
 // The Steamer express middleware can be used to automatically stuff a boat at req[ xyz ]
 // and attach its payload to `res.locals[ xyz ]` when `res.render` is called.
 app.use( steamer.stuffMiddleware( 'ssData' ) );
+
+//** routes **/
 
 app.get( '/', function( req, res ) {
 	// Now as our logic for a given route executes, we just add items to our boat's manifest...
@@ -171,7 +173,7 @@ Now we can initialize our boat with both a mongo container and a redis container
 app.use( function( req, res, next ) {
 	req.ssData = new steamer.Boat( {
 		containers : {
-			contacts : new steamer.Containers.MongoCollection( {
+			contacts : new steamer.MongoCollectionContainer( {
 				collection : mongoDb.collection( 'contacts' )
 			} ),
 			session : new RedisContainer( { client : redisClient } );
