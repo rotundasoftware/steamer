@@ -7,7 +7,7 @@ In modern web applications, one of the server's primary jobs is to load data and
 
 ```javascript
 // app.js
-// create a "boat" for every request that we will fill with our data
+// Create a Steamer "boat" for every request. We will declare its contents and then load it with data.
 app.use( function( req, res, next ) {
 	req.ssData = new steamer.Boat( {
 		containers : {
