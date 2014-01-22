@@ -99,7 +99,7 @@ Calls `stuff` on each of the boat's containers (in parallel), and `callback( err
 
 ### Container reference
 
-Containers have an initializer and three methods, `add`, `reset`, and `stuff`, which are analogous (and called by) the corresponding `boat` methods. It is trivial to make your own container types. For instance, here is an implementation of the redis container described above:
+Containers have an initializer and three methods, `add`, `reset`, and `stuff`, which are analogous to the corresponding `boat` methods. It is trivial to make your own container types. For instance, here is an implementation of the redis container described above:
 
 ```javascript
 RedisContainer = BaseContainer.extend( {
