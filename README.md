@@ -8,11 +8,11 @@ In modern web applications, one of the server's primary jobs is to load data and
 steamer = require( 'steamer' );
 // ...
 
-var ssData = new steamer.Boat( {  // Create a "boat". Boats are divided into containers that hold data.
+var ssData = new steamer.Boat( {  // Boats are divided into containers that hold data.
 	containers : {  // Declare and instantiate the containers in this boat.
 		// We will be loading data from a mongo collection called 'contacts'.
 		contacts : new steamer.Containers.MongoCollection( {
-			collection : mongoDb.collection( 'contacts' )  // supply a reference to the mongo collection
+			collection : db.collection( 'contacts' )  // supply a reference to the collection
 		} ),
 		// ... other "containers" go here
 	}
@@ -20,9 +20,9 @@ var ssData = new steamer.Boat( {  // Create a "boat". Boats are divided into con
 
 ssData.add( {
 	contacts : {
-		// add the names of some contacts to the contact container's "manifest" (i.e. list of contents)
+		// add an item to contact container's "manifest" (i.e. list of contents)
 		fields : [ 'firstName', 'lastName' ]
-		where : { 'active' : true } // standard mongo query
+		where : { 'active' : true }  // standard mongo query
 		limit : 100
 	}
 } );
@@ -31,7 +31,7 @@ ssData.add( {
 ssData.stuff( function( err, payload ) {
 	if( err ) throw err;
 
-	console.log( payload.contacts ); // Outputs loaded contact data
+	console.log( payload.contacts ); // Outputs names of first 100 active contacts
 } );
 ```
 
@@ -44,12 +44,11 @@ ssData.stuff( function( err, payload ) {
 // Install some middleware to create a boat on every request object
 // with containers for our application's common data sources.
 app.use( function( req, res, next ) {
-	req.ssData = new steamer.Boat( {
+	req.ssData = new steamer.Boat( {  // same as above
 		containers : {
 			contacts : new steamer.Containers.MongoCollection( {
-				collection : mongoDb.collection( 'contacts' )
-			} ),
-			// ...
+				collection : db.collection( 'contacts' )
+			} )
 		}
 	} );
 
@@ -75,7 +74,7 @@ app.get( '/', function( req, res ) {
 	res.render( 'index.jade' );
 } );
 ```
-So with a simple data dump in our layout template,
+So with a simple data dump, which we can do in our layout template,
 ```jade
 doctype html5
 html
