@@ -102,7 +102,9 @@ Calls `stuff` on each of the boat's containers (in parallel), and `callback( err
 Containers have an initializer and three methods, `add`, `reset`, and `stuff`, which are analogous to the corresponding `boat` methods. It is easy to make your own container types. For instance, here is an implementation of the redis container described above:
 
 ```javascript
-RedisContainer = BaseContainer.extend( {
+var steamer = require( 'steamer' );
+
+RedisContainer = steamer.Containers.Base.extend( {
 	initialize : function( options ) {
 		// Called when a container is instantiated. Save a reference to our redis client
 		this._client = options.client;
