@@ -87,7 +87,7 @@ Creates a new boat. `containers` is a hash of named containers.
 
 #### `boat.add( itemsByContainer )`
 
-Adds items to the boat's manifest. `itemsByContainer` is a hash of items to add keyed by container name. The boat calls the `add` method on each container with the supplied item for that container. (Therefore it is ultimately the container that determines how to add items to its own manifest). Keys that do not correspond to any container are treated as "bulk cargo", meaning they are passed through to the client without transformation.
+Adds items to the boat's manifest. `itemsByContainer` is a hash of items to add, keyed by container name. The boat calls the `add` method on each container with the supplied item for that container. (Therefore it is ultimately the container that determines how to add the item to its own manifest). Keys that do not correspond to any container are treated as "bulk cargo", meaning they are passed through to the client without transformation.
 
 #### `boat.reset()`
 
@@ -95,7 +95,7 @@ Clears the boat's manifest.
 
 #### `boat.stuff( callback )`
 
-Calls `stuff` on each of the boat's containers (in parallel), and `callback( err, payload )` when done, where `payload` is a hash of data keyed by container name (plus any "bulk cargo" entries). This method is called automatically by the optional express middleware.
+Calls `stuff` on each of the boat's containers (in parallel), and `callback( err, payload )` when done, where `payload` is a hash of data keyed by container name (plus any "bulk cargo" entries). The optional express middleware automatically calls this method and attaches the payload to `res.locals`.
 
 ### Container reference
 
