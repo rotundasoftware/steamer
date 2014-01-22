@@ -64,8 +64,14 @@ app.get( '/', function( req, res ) {
 	req.ssData.add( {
 		contacts : {
 			fields : [ 'firstName', 'lastName' ]
-			where : { 'active' : true }
-			limit : 100
+		}
+	} );
+
+	// ...
+
+	req.ssData.add( {
+		contacts : {
+			fields : [ 'phone' ]  /
 		}
 	} );
 
@@ -87,26 +93,20 @@ html
 
 The array of contact data will be in the browser at `window.ssData.contacts`. Wasn't that easy!
 
-## Details
+## The power of containerization
 
-As you can tell, the shipping metaphor runs deep in this repo. The object you will be interfacing with on the server side is a "boat". When you run through your server side logic, you will create a "manifest" for this boat, which declares all the data that should be loaded and sent to the client. When you are finished, you will "stuff" the boat with its contents and send them down with the response. The Steamer express middleware provides an added level of convenience by "stuffing" a boat automatically when `res.render` is called.
-
-Because containers are in charge of loading their own data (i.e. stuffing themselves), it is very easy to define your own container classes that use whatever declarative manifests make the most sense given your data source. For example, you could easily define a redis container type that loads data by key name:
+Because containers are in charge of managing their own manifests and loading their own data (i.e. stuffing themselves), it is very easy to define your own container classes perfectly suited for your needs. For example, you could easily define a redis container type that loads data by key name:
 ```javascript
-req.ssData.add( {
+ssData.add( {
 	session : [ 'userId', 'permissions' ]
 } );
 ```
-(You can an implementation of a redis container type below.) Boats can also contain "bulk cargo", which is data that is not in any named container. This data is simply passed through to the client directly.
-
+Also, containers can structure their payload with consideration to how it will be consumed. For example, Steamer's built in mongo collection container will merge fields from multiple manifest items as appropriate, and automatically add an `_id` field:
 ```javascript
-req.ssData.add( {
-	contacts : {  // mongo collection container
-		fields : '*',
-		sort : { lastName : 1 }
-	}
-	session : [ 'userId', 'permissions' ], // redis container
-	pricingTable : require( "./data/pricingTable.json" ) // "bulk cargo"
+ssData.add( { contacts : [ 'firstName' ] } );
+ssData.add( { contacts : [ 'lastName' ] } );
+ssData.stuff( function( err, payload ) {
+	// `payload.contacts` is an array of records, each of the form { _id : 123, firstName : xyz, lastName : pdq }
 } );
 ```
 
@@ -120,13 +120,24 @@ Creates a new boat. `containers` is a hash of named containers.
 
 Adds items to the boat's manifest. `itemsByContainer` is a hash of items to add, keyed by container name. The boat calls the `add` method on each container with the supplied item for that container. (Therefore it is ultimately the container that determines how to add its item to its own manifest). Keys that do not correspond to any container are treated as "bulk cargo", meaning they are passed through to the client without transformation.
 
+```javascript
+req.ssData.add( {
+	contacts : {  // mongo collection container
+		fields : '*',
+		sort : { lastName : 1 }
+	}
+	session : [ 'userId', 'permissions' ], // redis container
+	pricingTable : require( "./data/pricingTable.json" ) // "bulk cargo"
+} );
+```
+
 #### `boat.reset()`
 
 Clears the boat's manifest.
 
 #### `boat.stuff( callback )`
 
-Calls `stuff` on each of the boat's containers (in parallel), and `callback( err, payload )` when done, where `payload` is a hash of data keyed by container name (plus any "bulk cargo" entries). The optional express middleware automatically calls this method and attaches the payload to `res.locals`.
+Calls `stuff` on each of the boat's containers (in parallel), and `callback( err, payload )` when done, where `payload` is a hash of data keyed by container name (plus any "bulk cargo" entries).
 
 ### Container reference
 
