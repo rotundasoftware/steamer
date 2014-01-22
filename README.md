@@ -95,11 +95,15 @@ The array of contact data will be in the browser at `window.ssData.contacts`. Wa
 
 ## The power of containerization
 
-Because containers are in charge of managing their own manifests and loading their own data (i.e. stuffing themselves), it is very easy to define your own container classes perfectly suited for your needs. For example, you could easily define a redis container type that loads data by key name:
+Because containers are in charge of managing their own manifests and loading their own data (i.e. stuffing themselves), it is very easy to define your own container classes perfectly suited for your application. For example, you could easily define a redis container type that loads data by key name:
 ```javascript
 ssData.add( {
 	session : [ 'userId', 'permissions' ]
 } );
+ssData.stuff( function( err, payload ) {
+	// `payload.session` is a a hash of the form
+	// { userId : 123, permissions : [ "read", "write" ] }
+} )
 ```
 Also, containers can structure their payload with consideration to how it will be consumed. For example, Steamer's built in mongo collection container will merge fields from multiple manifest items, and ensure the `_id` field is supplied with each record:
 ```javascript
