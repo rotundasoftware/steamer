@@ -26,8 +26,8 @@ app.use( function( req, res, next ) {
 app.use( steamer.stuffMiddleware( 'ssData' ) );
 
 app.get( '/', function( req, res ) {
-	// As your logic for a given route executes, you may add to the manifest (i.e. list of 
-	// contents) that will be loaded into each "container" in your boat.
+	// As your logic for a given route executes, you may add to the manifest (i.e. list 
+	// of contents) that will be loaded into each "container" in your boat.
 	req.ssData.add( {
 		contacts : {
 			// add the names of the first 100 active contacts to the contact container's manifest
@@ -66,7 +66,7 @@ req.ssData.add( {
 	session : [ 'userId', 'permissions' ]
 } );
 ```
-Boats can also contain "bulk cargo", which is data that is not in any named container. This data is simply passed through to the client directly.
+(You can an implementation of a redis container type below.) Boats can also contain "bulk cargo", which is data that is not in any named container. This data is simply passed through to the client directly.
 
 ```javascript
 req.ssData.add( {
