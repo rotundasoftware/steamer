@@ -51,13 +51,6 @@ module.exports.Boat = Boat = Class.extend( {
 		this._consignee = options.consignee;
 
 		this._bulkCargo = {};
-
-		// if we have been supplied a response, override the render method to first load any
-		// data to bootstrap and populate the response object with that data.
-
-		if( this._response ) {
-			
-		}
 	},
 
 	add : function( itemsByContainer ) {
@@ -75,6 +68,8 @@ module.exports.Boat = Boat = Class.extend( {
 		_.each( this._containers, function( thisContainer ) {
 			thisContainer.reset();
 		} );
+
+		this._bulkCargo = {};
 	},
 
 	stuff : function( callback ) {

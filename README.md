@@ -1,27 +1,26 @@
 
-# ShipIt
+# Steamer
 
-Now that our clients are thick and our servers are thin, one of the server's primary jobs is just to load data and then bootstrap or relay it to the client. ShipIt is an very tiny module that allows this task to be performed with less code and more clarity by switching up the imperative, manual approach for a declarative, automated one.
+In modern web applications, one of the server's primary jobs is to load data and then simply relay it to the client. This rather mundane task can be accomplished with less code and more clarity using a declarative (as opposed to imperative) approach. Steamer is an very tiny module that facilitates taking the declarative approach.
 
 ## Example
 
-
 ```javascript
-
-// create a ShipIt "boat" for every request with a "mongo collection container" named 'contacts'
+// app.js
+// create a "boat" for every request with a "mongo collection container" named 'contacts'
 app.use( function( req, res, next ) {
-	req.ssData = new shipIt.Boat( {
+	req.ssData = new steamer.Boat( {
 		containers : {
-			contacts : new shipIt.Containers.MongoCollection( { collection : mongoDb.collection( 'contacts' ) } ),
-			... // other 'containers' would go here
+			contacts : new steamer.Containers.MongoCollection( { collection : mongoDb.collection( 'contacts' ) } ),
+			... // other "containers" go here
 		}
 	} );
 
 	next();
 } );
 
-// use the ShipIt express middleware to automatically "stuff" our boat when we are done (optional)
-app.use( shipIt.stuffMiddleware( "ssData" ) );
+// use the Steamer express middleware to automatically "stuff" our boat when we are done (optional)
+app.use( steamer.stuffMiddleware( 'ssData' ) );
 
 app.get( '/', function( req, res ) {
 	// As your server side logic executes, you may add to the manifest (i.e. list of 
@@ -56,15 +55,79 @@ Now the array of contact data will be in the browser at `window.ssData.contacts`
 
 ## Details
 
-As you can tell, the shipping metaphor runs deep in this repo. The object you will be interfacing with on the server side is a ShipIt "boat". When you run through your server side logic, you will create a "manifest" for this boat, which declares all the data that should be loaded and sent to the client. When you are finished, you will "stuff" the boat with its contents and send them down with the response. The ShipIt express middleware provides an added level of convenience by "stuffing" a boat automatically when `res.render` is called.
+As you can tell, the shipping metaphor runs deep in this repo. The object you will be interfacing with on the server side is a "boat". When you run through your server side logic, you will create a "manifest" for this boat, which declares all the data that should be loaded and sent to the client. When you are finished, you will "stuff" the boat with its contents and send them down with the response. The Steamer express middleware provides an added level of convenience by "stuffing" a boat automatically when `res.render` is called.
 
-Containers are in charge of loading their own data (i.e. stuffing themselves). Thus it is very easy to define your own container classes that load whatever kind of data you want using whatever manifests make this most sense given that data. For example, you could easily define a redis container type that loads data by a key name manifest:
+Because containers are in charge of loading their own data (i.e. stuffing themselves), it is very easy to define your own container classes that load whatever kind of data you want using whatever declarative manifest makes the most sense given your data source. For example, you could easily define a redis container type that loads data by key name:
 ```javascript
 req.ssData.add( {
 	session : [ 'userId', 'permissions' ]
 } );
 ```
-Now `window.ssData.session` on the client will be filled with the appropriate entries:
-```json
-{ "userId" : 3245, "permissions" : [ "read", "write" ] }
+Boats can also contain "bulk cargo", which is data that is not in any named container. This data is simply passed through to the client without being transformed during stuffing.
+
+```javascript
+req.ssData.add( {
+	contacts : {
+		fields : '*',
+		sort : { lastName : 1 }
+	}
+	session : [ 'userId', 'permissions' ],
+	pricingTable : require( "./data/pricingTable.json" ) // "bulk cargo"
+} );
+```
+
+## Boat reference
+
+#### `new Boat( containers )`
+
+Creates a new boat. `containers` is a hash of named containers.
+
+#### `boat.add( itemsByContainer )`
+
+Adds items to the boat's manifest. `itemsByContainer` is a hash of items to add keyed by container name. The boat calls the `add` method on each container with the supplied value for that container (so it is ultimately the container that determines how to add the items to its own manifest). Keys that do not correspond to any container are treated as "bulk cargo".
+
+#### `boat.reset()`
+
+Clear the boat's manifest.
+
+#### `boat.stuff( callback )`
+
+Calls `stuff` on each of the boat's containers (in parallel), and `callback( err, payload )` when done, where `payload` is a hash of data keyed by container name (plus any "bulk cargo" entries).
+
+## Container reference
+
+Containers have an initializer and three methods, `add`, `reset`, and `stuff`, which are analogous (and called by) the corresponding `boat` methods. It is trivial to make your own container types. For instance, here is an implementation of the redis container described above:
+
+```javascript
+RedisContainer = BaseContainer.extend( {
+	initialize : function( options ) {
+		this._client = options.client;
+	},
+
+	add : function( keys ) {
+		this._manifest = this._manifest.concat( keys );
+	},
+
+	stuff : function( callback ) {
+		var keys = this._manifest;
+		async.map( keys, client.get, function( err, values ) {
+			if( err ) return callback( err );
+			var payload = _.object( keys, values );
+			callback( null, payload );
+		}
+	},
+} );
+```
+Now we can initialize our boat with both containers:
+```
+app.use( function( req, res, next ) {
+	req.ssData = new steamer.Boat( {
+		containers : {
+			contacts : new steamer.Containers.MongoCollection( { collection : mongoDb.collection( 'contacts' ) } ),
+			session : new RedisContainer( { client : redisClient } );
+		}
+	} );
+
+	next();
+} );
 ```
