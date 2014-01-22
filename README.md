@@ -87,11 +87,11 @@ Creates a new boat. `containers` is a hash of named containers.
 
 #### `boat.add( itemsByContainer )`
 
-Adds items to the boat's manifest. `itemsByContainer` is a hash of items to add keyed by container name. The boat calls the `add` method on each container with the supplied value for that container (so it is ultimately the container that determines how to add the items to its own manifest). Keys that do not correspond to any container are treated as "bulk cargo".
+Adds items to the boat's manifest. `itemsByContainer` is a hash of items to add keyed by container name. The boat calls the `add` method on each container with the supplied item for that container. (Therefore it is ultimately the container that determines how to add items to its own manifest). Keys that do not correspond to any container are treated as "bulk cargo", meaning they are passed through to the client without transformation.
 
 #### `boat.reset()`
 
-Clear the boat's manifest.
+Clears the boat's manifest.
 
 #### `boat.stuff( callback )`
 
@@ -104,6 +104,7 @@ Containers have an initializer and three methods, `add`, `reset`, and `stuff`, w
 ```javascript
 RedisContainer = BaseContainer.extend( {
 	initialize : function( options ) {
+		// called when a container is instantiated
 		this._client = options.client;
 	},
 
