@@ -87,7 +87,7 @@ The array of contact data will be in the browser at `window.ssData.contacts`. Wa
 
 ## The power of containerization
 
-Because containers are in charge of managing their own manifests and loading their own data (i.e. stuffing themselves), it is very easy to define your own container classes perfectly suited for your application. For example, you could easily define a redis container type that loads data by key name:
+Because containers are in charge of managing their own manifests and loading their own data (i.e. stuffing themselves), you can design your own container classes for your application. For example, you could easily define a redis container type that loads data by key name:
 ```javascript
 ssData.add( {
 	session : [ 'userId', 'permissions' ]
