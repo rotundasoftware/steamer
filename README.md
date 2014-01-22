@@ -26,7 +26,7 @@ app.use( function( req, res, next ) {
 app.use( steamer.stuffMiddleware( 'ssData' ) );
 
 app.get( '/', function( req, res ) {
-	// As your server side logic executes, you may add to the manifest (i.e. list of 
+	// As your logic for a given route executes, you may add to the manifest (i.e. list of 
 	// contents) that will be loaded into each "container" in your boat.
 	req.ssData.add( {
 		contacts : {
