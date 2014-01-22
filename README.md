@@ -7,10 +7,11 @@ In modern web applications, one of the server's primary jobs is to load data and
 
 ```javascript
 // app.js
-// create a "boat" for every request with a "mongo collection container" named 'contacts'
+// create a "boat" for every request that we will fill with our data
 app.use( function( req, res, next ) {
 	req.ssData = new steamer.Boat( {
 		containers : {
+			// we will be loading data from a mongo collection called 'contacts'
 			contacts : new steamer.Containers.MongoCollection( {
 				collection : mongoDb.collection( 'contacts' )
 			} ),
