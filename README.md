@@ -97,7 +97,7 @@ ssData.stuff( function( err, payload ) {
 	// { userId : 123, permissions : [ "read", "write" ] }
 } )
 ```
-Also, since containers generate their own payload, they can structure it with consideration for how it will be consumed. For example, Steamer's built in mongo collection container will merge fields from multiple manifest items, and ensure the `_id` field is supplied with each record:
+And since containers generate their own payload, they can structure it with consideration for how it will be consumed. For example, Steamer's built in mongo collection container will merge fields from multiple manifest items, and ensure the `_id` field is supplied with each record:
 ```javascript
 ssData.add( { contacts : [ 'firstName' ] } );
 ssData.add( { contacts : [ 'lastName' ] } );
