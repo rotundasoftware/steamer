@@ -11,7 +11,9 @@ In modern web applications, one of the server's primary jobs is to load data and
 app.use( function( req, res, next ) {
 	req.ssData = new steamer.Boat( {
 		containers : {
-			contacts : new steamer.Containers.MongoCollection( { collection : mongoDb.collection( 'contacts' ) } ),
+			contacts : new steamer.Containers.MongoCollection( {
+				collection : mongoDb.collection( 'contacts' )
+			} ),
 			... // other "containers" go here
 		}
 	} );
