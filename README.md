@@ -125,7 +125,7 @@ RedisContainer = steamer.Containers.Base.extend( {
 	},
 } );
 ```
-Now we can initialize our boat with both containers:
+Now we can initialize our boat with both a mongo container and a redis container:
 ```
 app.use( function( req, res, next ) {
 	req.ssData = new steamer.Boat( {
