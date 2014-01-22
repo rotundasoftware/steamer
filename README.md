@@ -138,12 +138,13 @@ Calls `stuff` on each of the boat's containers (in parallel), and `callback( err
 
 ### Container reference
 
-Containers have an initializer and three methods, `add`, `reset`, and `stuff`, which are analogous to the corresponding `boat` methods. To define your own container type, simply define these methods. Let's see how easy it is to implement a redis container.
+Containers have an initializer and three methods, `add`, `reset`, and `stuff`, which are analogous to the corresponding `boat` methods. To define your own container type, simply define a class with these methods. Let's see how easy it is to implement a redis container we used in the examples above.
 
 ```javascript
+var Class = require( 'simple-class' );
 var steamer = require( 'steamer' );
 
-RedisContainer = steamer.Containers.Base.extend( {
+RedisContainer = Class.extend( {
 	initialize : function( options ) {
 		// Called when a container is instantiated.
 		this._keys = [];
