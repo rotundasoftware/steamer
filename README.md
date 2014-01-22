@@ -107,10 +107,12 @@ var steamer = require( 'steamer' );
 RedisContainer = steamer.Containers.Base.extend( {
 	initialize : function( options ) {
 		// Called when a container is instantiated. Save a reference to our redis client.
+		this._manifest = [];
 		this._client = options.client;
 	},
 
 	add : function( keys ) {
+		// Add an item (a key or array of keys) to our manifest.
 		this._manifest = this._manifest.concat( keys );
 	},
 
