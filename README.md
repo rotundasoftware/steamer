@@ -66,7 +66,7 @@ req.ssData.add( {
 	session : [ 'userId', 'permissions' ]
 } );
 ```
-Boats can also contain "bulk cargo", which is data that is not in any named container. This data is simply passed through to the client without being transformed during stuffing.
+Boats can also contain "bulk cargo", which is data that is not in any named container. This data is simply passed through to the client directly.
 
 ```javascript
 req.ssData.add( {
