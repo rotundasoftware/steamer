@@ -102,7 +102,7 @@ And since containers generate their own payload, they can structure it with cons
 ssData.add( { contacts : [ 'firstName' ] } );
 ssData.add( { contacts : [ 'lastName' ] } );
 ssData.stuff( function( err, payload ) {
-	// `payload.contacts` is an array of records, each of the form
+	// `payload.contacts` will be an array of records, each of the form
 	// { _id : 123, firstName : "xyz", lastName : "pdq" }
 } );
 ```
