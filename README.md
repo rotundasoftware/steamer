@@ -204,7 +204,7 @@ req.ssData.add( {
 ```
 
 * `fields` may be single field name, an array of field names, or an asterisk, indicating that all fields of the selected records should be included in the payload. The special `_id` field is always included.
-* `where` can be any value [mongo query](http://docs.mongodb.org/manual/tutorial/query-documents/).
+* `where` can be any valid [mongo query](http://docs.mongodb.org/manual/tutorial/query-documents/).
 * `sort` has the same semantics and format as in mongo's [`cursor.sort()`](http://docs.mongodb.org/manual/reference/method/cursor.sort/).
 * `skip` and `limit` have the same semantics as mongo's [`cursor.skip()`](http://docs.mongodb.org/manual/reference/method/cursor.skip/) and [`cursor.limit()`](http://docs.mongodb.org/manual/reference/method/cursor.skip/)
 
