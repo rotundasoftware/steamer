@@ -36,11 +36,14 @@ prepareMongo( function( err, mongoDb ) {
 		} );
 
 		req.ssData.add( {
-			contacts : {
+			contacts : [ {
 				fields : [ 'phone' ],
 				skip : 1,
 				limit : 2
-			}
+			}, {
+				fields : [ 'firstName', 'cell' ],
+				where : { firstName : /^\w{1,4}$/ } // bring down cell for people with first name between 1 and 4 chars
+			} ]
 		} );
 
 		res.render( 'index' );
