@@ -45,7 +45,7 @@ module.exports = function( options ) {
 			
 			cursor.toArray( function( err, records ) {
 				if( err ) return next( err );
-				
+
 				// apply skip and limit, now that filters have been applied
 				if( thisSelector.limit || thisSelector.skip )
 					records = records.splice( thisSelector.skip, thisSelector.limit );

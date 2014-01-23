@@ -118,7 +118,7 @@ Creates a new boat. `containers` is a hash of named containers.
 
 #### `boat.add( itemsByContainer )`
 
-Adds items to the boat's manifest. `itemsByContainer` is a hash of items to add, keyed by container name. The boat calls the `add` method on each container with the supplied item for that container. Keys that do not correspond to a container are treated as "bulk cargo" and stuffed without transformation.
+Adds items to the boat's manifest. `itemsByContainer` is a hash of items to add, keyed by container name. The boat calls the `add` method on each container with the supplied item for that container. Keys that do not correspond to a container are treated as ["bulk cargo"](http://en.wikipedia.org/wiki/Bulk_cargo) and stuffed without transformation.
 
 ```javascript
 req.ssData.add( {
@@ -141,7 +141,7 @@ Calls `stuff` on each of the boat's containers (in parallel), and `callback( err
 
 ### Defining containers
 
-Steamer only comes with a mongo collection container so it is up to you to define containers for other data sources. Containers must implement three methods, `add`, `reset`, and `stuff`, which are called by the corresponding `boat` methods. Let's see how to implement a redis container like the one we used above.
+Steamer only comes with a mongo collection container. It is up to you to define containers for other data sources. Containers must implement three methods, `add`, `reset`, and `stuff`, which are called by the corresponding `boat` methods. Let's see how to implement a redis container like the one we used above.
 
 ```javascript
 RedisContainer = function( options ) {
@@ -149,7 +149,7 @@ RedisContainer = function( options ) {
 	this._client = options.client;  // Save a reference to our redis client.
 
 	this.add = function( item ) {
-		// Add an item (a key or array of keys) to our manifest.
+		// Add an item, which can be a key or array of keys, to our manifest.
 		this._keys = this._manifest.concat( item );
 	};
 
@@ -157,13 +157,13 @@ RedisContainer = function( options ) {
 		this._keys = [];
 	};
 
-	this.stuff : function( callback ) {
+	this.stuff = function( callback ) {
 		async.map( this._keys, client.get, function( err, values ) {  // Get values from redis.
 			if( err ) return callback( err );
 
 			var payload = _.object( keys, values );  // Make a hash from our keys + values.
 			callback( null, payload );  // Return it as the stuffed contents of this container.
-		}
+		} );
 	};
 
 	return this;
@@ -203,7 +203,7 @@ req.ssData.add( {
 } );
 ```
 
-* `fields` may be single field name, an array of field names, or an asterisk, indicating that all fields should be included. The `_id` field is always included, regardless of whether or not it is in this list.
+* `fields` may be single field name, an array of field names, or an asterisk, indicating that all fields of the selected records should be included in the payload. The special `_id` field is always included.
 * `where` can be any value [mongo query](http://docs.mongodb.org/manual/tutorial/query-documents/).
 * `sort` has the same semantics and format as in mongo's [`cursor.sort()`](http://docs.mongodb.org/manual/reference/method/cursor.sort/).
 * `skip` and `limit` have the same semantics as mongo's [`cursor.skip()`](http://docs.mongodb.org/manual/reference/method/cursor.skip/) and [`cursor.limit()`](http://docs.mongodb.org/manual/reference/method/cursor.skip/)
