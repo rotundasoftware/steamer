@@ -1,40 +1,16 @@
+/*
+ * Steamer v0.2.0
+ * Copyright (c)2014 Rotunda Software, LLC.
+ * Distributed under MIT license
+ * http://github.com/rotundasoftware/steamer
+*/
 
 var _ = require( 'underscore' );
 var async = require( 'async' );
-
 var MongoCollectionContainer = require( './mongoCollectionContainer' );
 
-module.exports.stuffMiddleware = function( boatName ) {
-	return function( req, res, next ) {
-		var oldRender = res.render;
-
-		// override the render function on the response object to send down bootstrap data, and then
-		// call the original render function.
-
-		res.render = function( view, options, fn ) {
-			// see express implementation of render()... there is a pointer to request object in response object. We
-			// need a reference to the req object so that we can call req.next in the event of an error.
-			var res = this;
-			var req = this.req;
-			var renderArgs = arguments;
-
-			req[ boatName ].stuff( function( err, payload ) {
-				if( err ) return req.next( err );
-
-				res.locals[ boatName ] = payload;
-				oldRender.apply( res, renderArgs );
-			} );
-		};
-
-		next();
-	};
-};
-
 module.exports.Boat = function( options ) {
-	this._containers = options.containers;
-	this._response = options.response;
-	this._consignee = options.consignee;
-
+	this._containers = options.containers || {};
 	this._bulkCargo = {};
 
 	this.add = function( itemsByContainer ) {
@@ -81,3 +57,24 @@ module.exports.Boat = function( options ) {
 };
 
 module.exports.MongoCollectionContainer = MongoCollectionContainer;
+
+module.exports.stuffMiddleware = function( boatName ) {
+	return function( req, res, next ) {
+		var oldRender = res.render;
+
+		// Wrap the original render function at `res.render` so we can add some logic to stuff 
+		// the boat at req[ boatName ], and attach its payload to res.locals[ boatName ].
+		res.render = function( view, options, fn ) {
+			var renderArgs = Array.prototype.slice.apply( arguments );
+
+			req[ boatName ].stuff( function( err, payload ) {
+				if( err ) return req.next( err );
+
+				res.locals[ boatName ] = payload;
+				oldRender.apply( res, renderArgs );
+			} );
+		};
+
+		next();
+	};
+};
