@@ -59,8 +59,6 @@ app.use( function( req, res, next ) {
 // and attach its payload to `res.locals[ xyz ]` when `res.render` is called.
 app.use( steamer.stuffMiddleware( 'ssData' ) );
 
-/***** routes *****/
-
 app.get( '/', function( req, res ) {
 	// Now as our logic for a given route executes, we just add items to our boat's manifest...
 	req.ssData.add( {
@@ -74,7 +72,7 @@ app.get( '/', function( req, res ) {
 	res.render( 'index.jade' );
 } );
 ```
-So with a simple JSON dump, which we can do in our layout template,
+Then with a simple JSON dump, which we can do in our layout template,
 ```jade
 doctype html5
 html
@@ -89,7 +87,7 @@ The array of contact data will be in the browser at `window.ssData.contacts`. Wa
 
 ## The power of containerization
 
-Because containers are in charge of managing their own manifests and loading their own data (i.e. stuffing themselves), container classes can be designed to suit any data source. For example, you could easily define a redis container type that loads data by key name:
+Because containers are in charge of managing their own manifests and loading their own data (i.e. stuffing themselves), container classes can be designed to suit any data source or purpose. For example, you could easily define a redis container type that loads data by key name:
 ```javascript
 ssData.add( {
 	session : [ 'userId', 'permissions' ]
