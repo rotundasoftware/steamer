@@ -60,7 +60,7 @@ app.use( function( req, res, next ) {
 app.use( steamer.stuffMiddleware( 'ssData' ) );
 
 app.get( '/', function( req, res ) {
-	// Now as our logic for a given route executes, we just add items to our boat's manifest...
+	// As our logic for a given route executes, we just add items to our boat's manifest...
 	req.ssData.add( {
 		contacts : {
 			fields : [ 'firstName', 'lastName' ]
@@ -87,7 +87,7 @@ The array of contact data will be in the browser at `window.ssData.contacts`. Wa
 
 ## The power of containerization
 
-Because containers are in charge of managing their own manifests and loading their own data (i.e. stuffing themselves), container classes can be designed to suit any data source or purpose. For example, you could easily define a redis container type that loads data by key name:
+Because containers are in charge of managing their own manifests and loading their own data (i.e. stuffing themselves), container classes can be designed to suit any data source or purpose. For example, you could easily define a redis container class that loads data by key name:
 ```javascript
 ssData.add( {
 	session : [ 'userId', 'permissions' ]
@@ -118,7 +118,7 @@ Creates a new boat. `containers` is a hash of named containers.
 
 #### `boat.add( itemsByContainer )`
 
-Adds items to the boat's manifest. `itemsByContainer` is a hash of items to add, keyed by container name. The boat calls the `add` method on each container with the supplied item for that container. Keys that do not correspond to a container are treated as "bulk cargo" and passed through to the client without transformation.
+Adds items to the boat's manifest. `itemsByContainer` is a hash of items to add, keyed by container name. The boat calls the `add` method on each container with the supplied item for that container. Keys that do not correspond to a container are treated as "bulk cargo" and stuffed without transformation.
 
 ```javascript
 req.ssData.add( {
