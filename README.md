@@ -1,7 +1,7 @@
 
 # Steamer
 
-In modern web applications, one of the server's primary jobs is to load data and then simply relay it to the client. This task can be accomplished with less code and more clarity using a declarative (as opposed to an imperative) approach. Steamer is an tiny module that facilitates loading and relaying data declaratively.
+In thick client web applications, one of the server's primary jobs is to load data and then simply relay it to the client. This task can be accomplished with less code and more clarity using a declarative (as opposed to an imperative) approach. Steamer is an tiny module that facilitates loading and relaying data declaratively.
 
 ## Simplest example ever
 ```javascript
@@ -10,7 +10,7 @@ steamer = require( 'steamer' );
 
 var ssData = new steamer.Boat( {  // Boats are divided into "containers" that hold data.
 	containers : {  // Declare and instantiate the containers in this boat.
-		// We will be loading data from a mongo collection called 'contacts'.
+		// We will be sourcing data from a mongo collection called 'contacts'.
 		contacts : new steamer.MongoCollectionContainer( {
 			collection : db.collection( 'contacts' )  // supply a reference to the collection
 		} ),
@@ -31,7 +31,8 @@ ssData.add( {
 ssData.stuff( function( err, payload ) {
 	if( err ) throw err;
 
-	console.log( payload.contacts ); // array of objects representing first 100 active contacts
+	 // `payload.contacts` is now array of objects representing first 100 active contacts
+	console.log( payload.contacts );
 } );
 ```
 
@@ -148,25 +149,25 @@ RedisContainer = function( options ) {
 	this._keys = [];
 	this._client = options.client;  // Save a reference to our redis client.
 
-	this.add = function( item ) {
-		// Add an item, which can be a key or array of keys, to our manifest.
-		this._keys = this._manifest.concat( item );
-	};
-
-	this.reset = function() {
-		this._keys = [];
-	};
-
-	this.stuff = function( callback ) {
-		async.map( this._keys, client.get, function( err, values ) {  // Get values from redis.
-			if( err ) return callback( err );
-
-			var payload = _.object( keys, values );  // Make a hash from our keys + values.
-			callback( null, payload );  // Return it as the stuffed contents of this container.
-		} );
-	};
-
 	return this;
+};
+
+RedisContainer.prototype.add = function( item ) {
+	// Add an item, which can be a key or array of keys, to our manifest.
+	this._keys = this._manifest.concat( item );
+};
+
+RedisContainer.prototype.reset = function() {
+	this._keys = [];
+};
+
+RedisContainer.prototype.stuff = function( callback ) {
+	async.map( this._keys, client.get, function( err, values ) {  // Get values from redis.
+		if( err ) return callback( err );
+
+		var payload = _.object( keys, values );  // Make a hash from our keys + values.
+		callback( null, payload );  // Return it as the stuffed contents of this container.
+	} );
 };
 ```
 Now we can initialize our boat with both a mongo container and a redis container.

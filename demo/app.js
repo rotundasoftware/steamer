@@ -1,18 +1,16 @@
 var express = require( 'express' );
 var steamer = require( '../src/steamer' );
 var app = express();
-var mongo = require( 'mongodb' );
+var mongoClient = require( 'mongodb' ).MongoClient;
 var contactsJson = require( './contacts.json' );
 
 var MONGO_URI = 'mongodb://localhost';
-
-var mongoClient = mongo.MongoClient;
 
 prepareMongo( function( err, mongoDb ) {
 	app.set( 'views', __dirname + '/views');
 	app.set( 'view engine', 'jade');
 
-	// create a steamer "boat" for every request with a "mongo collection Container" named 'contacts'
+	// create a steamer "boat" for every request with a mongo collection Container named 'contacts'
 	app.use( function( req, res, next ) {
 		req.ssData = new steamer.Boat( {
 			containers : {
@@ -29,7 +27,6 @@ prepareMongo( function( err, mongoDb ) {
 	app.use( app.router );
 
 	app.get( '/', function( req, res ) {
-
 		req.ssData.add( {
 			contacts : {
 				fields : [ 'firstName', 'lastName' ],
