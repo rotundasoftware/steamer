@@ -27,7 +27,7 @@ ssData.add( {
 	}
 } );
 
-// The `boat.stuff()` method loads the data described by each container's manifest.
+// The `boat.stuff()` method asynchronously loads the data described by each container's manifest.
 ssData.stuff( function( err, payload ) {
 	if( err ) throw err;
 
@@ -40,7 +40,7 @@ ssData.stuff( function( err, payload ) {
 
 ```javascript
 // app.js
-// ...
+// Once our ducks are lined up sending data in express.js apps becomes a one-liner.
 
 // Install some middleware to create a boat on every request object
 // with containers for our application's common data sources.

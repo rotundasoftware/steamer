@@ -3,8 +3,8 @@
   "description": "Send data to the client with less code and more clarity in your node.js applications.",
   "version": "0.1.0",
   "author": {
-    "name": "Rotunda Software",
-    "email": "support@rotundasoftware.com"
+    "name": "David Beck",
+    "email": "david@rotundasoftware.com"
   },
   "repository": {
     "type": "git",
@@ -32,5 +32,7 @@
   "dependencies": {
     "underscore": "~1.4.4",
     "async": "*"
-  }
+  },
+  "devDependencies": {},
+  "optionalDependencies": {}
 }
