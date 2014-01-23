@@ -205,7 +205,11 @@ req.ssData.add( {
 } );
 ```
 
-* `fields` may be single field name, an array of field names, or an asterisk, indicating that all fields should be stuffed into the container. The `_id` field is always stuffed, regardless of whether or not it is included in this list.
+* `fields` may be single field name, an array of field names, or an asterisk, indicating that all fields should be included. The `_id` field is always included, regardless of whether or not it is in this list.
 * `where` can be any value [mongo query](http://docs.mongodb.org/manual/tutorial/query-documents/).
-* `sort` has the same format as the argument to mongo's [`cursor.sort()` function](http://docs.mongodb.org/manual/reference/method/cursor.sort/).
-* `skip` and `limit` have the same semantics as mongo's `cursor.skip()` and `cursor.limit()`
+* `sort` has the same semantics and format as in mongo's [`cursor.sort()`](http://docs.mongodb.org/manual/reference/method/cursor.sort/).
+* `skip` and `limit` have the same semantics as mongo's [`cursor.skip()`](http://docs.mongodb.org/manual/reference/method/cursor.skip/) and [`cursor.limit()`](http://docs.mongodb.org/manual/reference/method/cursor.skip/)
+
+## License
+
+MIT
