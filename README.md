@@ -118,7 +118,7 @@ Creates a new boat. `containers` is a hash of named containers.
 
 #### `boat.add( itemsByContainer )`
 
-Adds items to the boat's manifest. `itemsByContainer` is a hash of items to add, keyed by container name. The boat calls the `add` method on each container with the supplied item for that container. (Therefore it is ultimately the container that determines how to add its item to its own manifest). Keys that do not correspond to any container are treated as "bulk cargo", meaning they are passed through to the client without transformation.
+Adds items to the boat's manifest. `itemsByContainer` is a hash of items to add, keyed by container name. The boat calls the `add` method on each container with the supplied item for that container. Keys that do not correspond to any container are treated as "bulk cargo", meaning they are passed through to the client without transformation.
 
 ```javascript
 req.ssData.add( {
@@ -141,7 +141,7 @@ Calls `stuff` on each of the boat's containers (in parallel), and `callback( err
 
 ### Defining containers
 
-Steamer only comes with a mongo collection container built in but you can easily define containers for other data sources. Containers must implement three methods, `add`, `reset`, and `stuff`, which are called by the corresponding `boat` methods. Let's see how to implement a redis container like the one we used above.
+Steamer only comes with a mongo collection container built in so it is up to you to define containers for other data sources. Containers must implement three methods, `add`, `reset`, and `stuff`, which are called by the corresponding `boat` methods. Let's see how to implement a redis container like the one we used above.
 
 ```javascript
 RedisContainer = function( options ) {
