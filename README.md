@@ -20,14 +20,14 @@ var ssData = new steamer.Boat( {  // Boats are divided into "containers" that ho
 
 ssData.add( {
 	contacts : {
-		// add an item to the contact container's "manifest" (i.e. list of contents)
+		// Add an item to the contact container's "manifest" (i.e. list of contents).
 		fields : [ 'firstName', 'lastName' ]
 		where : { 'active' : true }  // standard mongo query
 		limit : 100
 	}
 } );
 
-// the `boat.stuff()` method loads the data described by each container's manifest
+// The `boat.stuff()` method loads the data described by each container's manifest.
 ssData.stuff( function( err, payload ) {
 	if( err ) throw err;
 
@@ -68,7 +68,7 @@ app.get( '/', function( req, res ) {
 	} );
 
 	// ...and they will automatically be loaded for us and attached
-	// to `res.locals.ssData` when `res.render` is called
+	// to `res.locals.ssData` when `res.render` is called.
 	res.render( 'index.jade' );
 } );
 ```
