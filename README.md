@@ -20,7 +20,7 @@ var ssData = new steamer.Boat( {  // Boats are divided into "containers" that ho
 
 ssData.add( {
 	contacts : {
-		// add an item to contact container's "manifest" (i.e. list of contents)
+		// add an item to the contact container's "manifest" (i.e. list of contents)
 		fields : [ 'firstName', 'lastName' ]
 		where : { 'active' : true }  // standard mongo query
 		limit : 100
