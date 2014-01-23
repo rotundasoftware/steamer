@@ -141,7 +141,7 @@ Calls `stuff` on each of the boat's containers (in parallel), and `callback( err
 
 ### Defining containers
 
-Steamer only comes with a mongo collection container built in so it is up to you to define containers for other data sources. Containers must implement three methods, `add`, `reset`, and `stuff`, which are called by the corresponding `boat` methods. Let's see how to implement a redis container like the one we used above.
+Steamer only comes with a mongo collection container so it is up to you to define containers for other data sources. Containers must implement three methods, `add`, `reset`, and `stuff`, which are called by the corresponding `boat` methods. Let's see how to implement a redis container like the one we used above.
 
 ```javascript
 RedisContainer = function( options ) {
@@ -169,7 +169,7 @@ RedisContainer = function( options ) {
 	return this;
 };
 ```
-Now we can initialize our boat with both a mongo container and a redis container:
+Now we can initialize our boat with both a mongo container and a redis container.
 ```
 app.use( function( req, res, next ) {
 	req.ssData = new steamer.Boat( {
@@ -189,7 +189,7 @@ Easy.
 
 ### The built-in mongo collection container
 
-When instantiating the built in mongo collection container, you pass it an `options` object with a reference to the appropriate collection, as shown in the examples above. When adding an item to the container's manifest, you pass it a "selector" object:
+When instantiating the built in mongo collection container, pass it an `options` object with a reference to the collection, as shown above. When adding to the container's manifest, supply a "selector" object:
 
 ```javascript
 req.ssData.add( {
