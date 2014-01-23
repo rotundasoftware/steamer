@@ -111,7 +111,7 @@ ssData.stuff( function( err, payload ) {
 
 ## Reference
 
-### steamer.Boat
+### The Boat object
 
 #### `new Boat( containers )`
 
