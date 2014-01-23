@@ -40,7 +40,7 @@ ssData.stuff( function( err, payload ) {
 
 ```javascript
 // app.js
-// Once our ducks are lined up sending data in express.js apps becomes a one-liner.
+// Once our ducks are lined up loading and sending data in express.js apps is a one-liner.
 
 // Install some middleware to create a boat on every request object
 // with containers for our application's common data sources.
