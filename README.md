@@ -31,7 +31,7 @@ ssData.add( {
 ssData.stuff( function( err, payload ) {
 	if( err ) throw err;
 
-	console.log( payload.contacts ); // Contains names of first 100 active contacts
+	console.log( payload.contacts ); // array of objects representing first 100 active contacts
 } );
 ```
 
