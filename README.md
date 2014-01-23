@@ -6,7 +6,6 @@ In thick client web applications, one of the server's primary jobs is to load da
 ## Simplest example ever
 ```javascript
 steamer = require( 'steamer' );
-// ...
 
 var ssData = new steamer.Boat( {  // Boats are divided into "containers" that hold data.
 	containers : {  // Declare and instantiate the containers in this boat.
@@ -21,8 +20,8 @@ var ssData = new steamer.Boat( {  // Boats are divided into "containers" that ho
 ssData.add( {
 	contacts : {
 		// Add an item to the contact container's "manifest" (i.e. list of contents).
-		fields : [ 'firstName', 'lastName' ]
-		where : { 'active' : true }  // standard mongo query
+		fields : [ 'firstName', 'lastName' ],
+		where : { 'active' : true },  // standard mongo query
 		limit : 100
 	}
 } );
@@ -31,7 +30,7 @@ ssData.add( {
 ssData.stuff( function( err, payload ) {
 	if( err ) throw err;
 
-	 // `payload.contacts` is now an array of objects representing first 100 active contacts
+	// `payload.contacts` is now an array of objects representing first 100 active contacts
 	console.log( payload.contacts );
 } );
 ```
