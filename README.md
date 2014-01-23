@@ -188,3 +188,24 @@ app.use( function( req, res, next ) {
 ```
 
 Easy.
+
+### The built-in mongo collection container
+
+When instantiating the built in mongo collection container, you pass it an `options` object with a reference to the appropriate collection, as shown in the examples above. When adding an item to the container's manifest, you pass it a "selector" object:
+
+```javascript
+req.ssData.add( {
+	contacts : {
+		fields : '*',
+		where : { group: { $in: [ 'business', 'personal' ] } },
+		sort : { lastName : 1, firstName : 1 },
+		skip : 200,
+		limit : 100
+	}
+} );
+```
+
+* `fields` may be single field name, an array of field names, or an asterisk, indicating that all fields should be stuffed into the container. The `_id` field is always stuffed, regardless of whether or not it is included in this list.
+* `where` can be any value [mongo query](http://docs.mongodb.org/manual/tutorial/query-documents/).
+* `sort` has the same format as the argument to mongo's [`cursor.sort()` function](http://docs.mongodb.org/manual/reference/method/cursor.sort/).
+* `skip` and `limit` have the same semantics as mongo's `cursor.skip()` and `cursor.limit()`

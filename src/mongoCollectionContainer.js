@@ -21,7 +21,6 @@ module.exports = function( options ) {
 			thisSelector = _.extend( {
 				fields : [],
 				where : {},
-				filters : [],
 				sort : null,
 				skip : 0,
 				limit : 0
@@ -46,12 +45,7 @@ module.exports = function( options ) {
 			
 			cursor.toArray( function( err, records ) {
 				if( err ) return next( err );
-
-				// apply filter functions supplied in thisSelector.filters. allows for pseudo joins
-				_.each( thisSelector.filters, function( thisFilter ) {
-					records = _.filter( records, thisFilter );
-				} );
-
+				
 				// apply skip and limit, now that filters have been applied
 				if( thisSelector.limit || thisSelector.skip )
 					records = records.splice( thisSelector.skip, thisSelector.limit );
