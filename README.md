@@ -212,11 +212,11 @@ You can also provide an array of selector objects (equivalent to calling `boat.a
 
 ```javascript
 req.ssData.add( {
-	user : [ {
+	contacts : [ {
 		fields : [ 'firstName', 'lastName' ],  // load first and last name for everyone
 	}, {
 		fields : '*',
-		where : { _id : req.session.userId }  // and all fields just for the logged in user
+		where : { _id : req.session.contactId }  // and all fields just for the logged in contact
 	} ],
 	// ...
 } );
