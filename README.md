@@ -208,7 +208,7 @@ req.ssData.add( {
 * `sort` has the same semantics and format as in mongo's [`cursor.sort()`](http://docs.mongodb.org/manual/reference/method/cursor.sort/).
 * `skip` and `limit` have the same semantics as mongo's [`cursor.skip()`](http://docs.mongodb.org/manual/reference/method/cursor.skip/) and [`cursor.limit()`](http://docs.mongodb.org/manual/reference/method/cursor.skip/)
 
-You can also supply an array of selector objects (equivalent to calling `boat.add()` multiple times):
+You can also provide an array of selector objects (equivalent to calling `boat.add()` once for each selector):
 
 ```javascript
 req.ssData.add( {
