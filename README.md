@@ -31,7 +31,7 @@ ssData.add( {
 ssData.stuff( function( err, payload ) {
 	if( err ) throw err;
 
-	 // `payload.contacts` is now array of objects representing first 100 active contacts
+	 // `payload.contacts` is now an array of objects representing first 100 active contacts
 	console.log( payload.contacts );
 } );
 ```
@@ -68,8 +68,8 @@ app.get( '/', function( req, res ) {
 		}
 	} );
 
-	// ...and they will automatically be loaded for us and attached
-	// to `res.locals.ssData` when `res.render` is called.
+	// ...and the appropriate data will automatically be loaded for us and
+	// attached to `res.locals.ssData` when `res.render` is called.
 	res.render( 'index.jade' );
 } );
 ```
