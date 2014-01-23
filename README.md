@@ -118,7 +118,7 @@ Creates a new boat. `containers` is a hash of named containers.
 
 #### `boat.add( itemsByContainer )`
 
-Adds items to the boat's manifest. `itemsByContainer` is a hash of items to add, keyed by container name. The boat calls the `add` method on each container with the supplied item for that container. Keys that do not correspond to any container are treated as "bulk cargo", meaning they are passed through to the client without transformation.
+Adds items to the boat's manifest. `itemsByContainer` is a hash of items to add, keyed by container name. The boat calls the `add` method on each container with the supplied item for that container. Keys that do not correspond to a container are treated as "bulk cargo" and passed through to the client without transformation.
 
 ```javascript
 req.ssData.add( {
