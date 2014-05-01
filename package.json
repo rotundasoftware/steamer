@@ -1,7 +1,7 @@
 {
   "name": "steamer",
   "description": "Send data to the client with less code and more clarity in your node.js applications.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": {
     "name": "David Beck",
     "email": "david@rotundasoftware.com"
@@ -27,7 +27,7 @@
     "synchronization",
     "node",
     "express",
-	"middleware"
+    "middleware"
   ],
   "dependencies": {
     "underscore": "~1.6.0",
