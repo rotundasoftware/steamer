@@ -8,13 +8,11 @@ In thick client web applications, one of the server's primary jobs is to load da
 steamer = require( 'steamer' );
 
 var ssData = new steamer.Boat( {  // Boats are divided into "containers" that hold data.
-	containers : {  // Declare and instantiate the containers in this boat.
-		// We will be sourcing data from a mongo collection called 'contacts'.
-		contacts : new steamer.MongoCollectionContainer( {
-			collection : db.collection( 'contacts' )  // supply a reference to the collection
-		} ),
-		// ... other containers go here
-	}
+	// We will be sourcing data from a mongo collection called 'contacts'.
+	contacts : new steamer.MongoCollectionContainer( {
+		collection : db.collection( 'contacts' )  // supply a reference to the collection
+	} ),
+	// ... other containers go here
 } );
 
 ssData.add( {
@@ -45,11 +43,9 @@ ssData.stuff( function( err, payload ) {
 // with containers for our application's common data sources.
 app.use( function( req, res, next ) {
 	req.ssData = new steamer.Boat( {  // same as above
-		containers : {
-			contacts : new steamer.MongoCollectionContainer( {
-				collection : db.collection( 'contacts' )
-			} )
-		}
+		contacts : new steamer.MongoCollectionContainer( {
+			collection : db.collection( 'contacts' )
+		} )
 	} );
 
 	next();
@@ -173,12 +169,10 @@ Now we can initialize our boat with both a mongo container and a redis container
 ```
 app.use( function( req, res, next ) {
 	req.ssData = new steamer.Boat( {
-		containers : {
-			contacts : new steamer.MongoCollectionContainer( {
-				collection : mongoDb.collection( 'contacts' )
-			} ),
-			session : new RedisContainer( { client : redisClient } );
-		}
+		contacts : new steamer.MongoCollectionContainer( {
+			collection : mongoDb.collection( 'contacts' )
+		} ),
+		session : new RedisContainer( { client : redisClient } )
 	} );
 
 	next();

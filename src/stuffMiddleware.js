@@ -18,6 +18,7 @@ module.exports = function( boatName ) {
 				if( err ) return req.next( err );
 
 				res.locals[ boatName ] = payload;
+
 				oldRender.apply( res, renderArgs );
 			} );
 		};

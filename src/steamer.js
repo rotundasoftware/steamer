@@ -8,10 +8,11 @@
 var _ = require( 'underscore' );
 var async = require( 'async' );
 var MongoCollectionContainer = require( './mongoCollectionContainer' );
+var HashContainer = require( './hashContainer' );
 var stuffMiddleware = require( './stuffMiddleware' );
 
-Boat = function( options ) {
-	this._containers = options.containers || {};
+Boat = function( containers ) {
+	this._containers = containers || {};
 	this._bulkCargo = {};
 
 	return this;
@@ -59,4 +60,5 @@ Boat.prototype.stuff = function( callback ) {
 
 module.exports.Boat = Boat;
 module.exports.MongoCollectionContainer = MongoCollectionContainer;
+module.exports.HashContainer = HashContainer;
 module.exports.stuffMiddleware = stuffMiddleware;
