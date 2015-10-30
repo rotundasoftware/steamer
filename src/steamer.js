@@ -11,7 +11,7 @@ var MongoCollectionContainer = require( './mongoCollectionContainer' );
 var HashContainer = require( './hashContainer' );
 var stuffMiddleware = require( './stuffMiddleware' );
 
-Boat = function( containers ) {
+var Boat = function( containers ) {
 	this._containers = containers || {};
 	this._bulkCargo = {};
 

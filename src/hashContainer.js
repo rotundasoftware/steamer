@@ -7,7 +7,7 @@
 
 var _ = require( 'underscore' );
 
-HashContainer = function( options ) {
+var HashContainer = function( options ) {
 	this._hash = options.hash;
 	this._keys = [];
 
@@ -28,10 +28,10 @@ HashContainer.prototype.stuff = function( callback ) {
 	var containerContents = {};
 
 	this._keys.forEach( function( thisKey ) {
-      if( thisKey in _this._hash ) containerContents[ thisKey ] = _this._hash[ thisKey ];
-    } );
+		if( thisKey in _this._hash ) containerContents[ thisKey ] = _this._hash[ thisKey ];
+	} );
 
-    callback( null, containerContents );
+	callback( null, containerContents );
 };
 
 module.exports = HashContainer;
