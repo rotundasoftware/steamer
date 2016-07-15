@@ -29,6 +29,10 @@ Boat.prototype.add = function( itemsByContainer ) {
 	} );
 };
 
+Boat.prototype.addContainers = function( newContainers ) {
+	this._containers = _.extend( this._containers, newContainers );
+};
+
 Boat.prototype.reset = function() {
 	_.each( this._containers, function( thisContainer ) {
 		thisContainer.reset();

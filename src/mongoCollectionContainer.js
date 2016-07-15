@@ -8,7 +8,7 @@
 var _ = require( 'underscore' );
 var async = require( "async" );
 
-var MongoCollectionContainer = function( options ) {
+MongoCollectionContainer = function( options ) {
 	this._collection = options.collection;
 	this._selectors = [];
 
