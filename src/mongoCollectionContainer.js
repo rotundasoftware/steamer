@@ -56,7 +56,7 @@ MongoCollectionContainer.prototype.stuff = function( callback ) {
 		if( thisSelector.limit ) cursor.limit( thisSelector.limit );
 		
 		cursor.toArray( function( err, records ) {
-			if( err ) return next( err );
+			if( err ) return callback( err );
 
 			_.each( records, function( thisRecord ) {
 				var recordId = thisRecord._id;
