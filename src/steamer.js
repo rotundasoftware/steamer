@@ -44,21 +44,29 @@ Boat.prototype.reset = function() {
 Boat.prototype.stuff = function( callback ) {
 	var _this = this;
 
-	// pack each container, get the results of the packing, 
-	var contentsByContainer = {};
-	var containerNames = _.keys( this._containers );
+	return new Promise( function( resolve, reject ) {
+		// pack each container, get the results of the packing, 
+		var contentsByContainer = {};
+		var containerNames = _.keys( _this._containers );
 
-	async.each( containerNames, function( thisContainerName, callback ) {
-		_this._containers[ thisContainerName ].stuff( function( err, data ) {
-			if( err ) return callback( err );
+		async.each( containerNames, function( thisContainerName, nextEach ) {
+			_this._containers[ thisContainerName ].stuff( function( err, data ) {
+				if( err ) return nextEach( err );
 
-			contentsByContainer[ thisContainerName ] = data;
-			callback();
+				contentsByContainer[ thisContainerName ] = data;
+				nextEach();
+			} );
+		}, function( err ) {
+			if( err ) {
+				if( callback ) return callback( err );
+				else return reject( err );
+			}
+
+			var contents = _.extend( contentsByContainer, _this._bulkCargo );
+
+			if( callback ) callback( null, contents );
+			resolve( contents );
 		} );
-	}, function( err ) {
-		if( err ) return callback( err );
-
-		callback( null, _.extend( contentsByContainer, _this._bulkCargo ) );
 	} );
 };
 
