@@ -18,14 +18,18 @@ var Boat = function( containers ) {
 	return this;
 };
 
-Boat.prototype.add = function( itemsByContainer ) {
+Boat.prototype.add = function( itemsByContainerArray ) {
 	var _this = this;
 
-	_.each( itemsByContainer, function( thisItem, thisContainerName ) {
-		if( _.has( _this._containers, thisContainerName ) )
-			_this._containers[ thisContainerName ].add( thisItem );
-		else
-			_this._bulkCargo[ thisContainerName ] = thisItem;
+	if( ! _.isArray( itemsByContainerArray ) ) itemsByContainerArray = [ itemsByContainerArray ];
+
+	_.each( itemsByContainerArray, function( itemsByContainer ) {
+		_.each( itemsByContainer, function( thisItem, thisContainerName ) {
+			if( _.has( _this._containers, thisContainerName ) )
+				_this._containers[ thisContainerName ].add( thisItem );
+			else
+				_this._bulkCargo[ thisContainerName ] = thisItem;
+		} );
 	} );
 };
 
