@@ -10,6 +10,7 @@ var async = require( "async" );
 
 MongoCollectionContainer = function( options ) {
 	this._collection = options.collection;
+	this._normalizeId = _.isUndefined( options.normalizeId ) ? false : options.normalizeId;
 	this._selectors = [];
 
 	return this;
@@ -26,7 +27,7 @@ MongoCollectionContainer.prototype.reset = function() {
 
 MongoCollectionContainer.prototype.stuff = function( callback ) {
 	var _this = this;
-	var recordsById = {};
+	var records = [];
 
 	async.each( this._selectors, function( thisSelector, callback ) {
 		thisSelector = _.extend( {
@@ -37,32 +38,60 @@ MongoCollectionContainer.prototype.stuff = function( callback ) {
 			limit : 0
 		}, thisSelector );
 
-		var allConditions = [];
-		if( thisSelector.where ) allConditions.push( thisSelector.where );
+		var mongoQuery;
+		var orClauses = [];
+		var where = thisSelector.where;
+
+		if( ! _.isArray( where ) ) where = [ where ];
+		_.each( where, function( thisWhere ) {
+			var thisMongoQuery = _.reduce( Object.keys( thisWhere ), function( thisMongoQueryMemo, thisFieldName ) {
+				var thisFieldNameNormalized = thisFieldName === 'id' ? '_id' : thisFieldName;
+
+				if( _.isArray( thisWhere[ thisFieldName ] ) ) {
+					thisMongoQueryMemo[ thisFieldNameNormalized ] = { $in : thisWhere[ thisFieldName ] };
+				} else {
+					thisMongoQueryMemo[ thisFieldNameNormalized ] = thisWhere[ thisFieldName ];
+				}
+
+				return thisMongoQueryMemo;
+			}, {} );
+
+			orClauses.push( thisMongoQuery );
+		} );
+
+		if( orClauses.length > 1 ) {
+			mongoQuery = { $or : orClauses };
+		} else {
+			mongoQuery = orClauses[ 0 ];
+		}
 
 		var projection = {};
 
-		var mongoQuery = allConditions.length > 1 ? { $and : allConditions } : _.first( allConditions );
 		if( thisSelector.fields !== "*" ) {
-			thisSelector.fields = _.union( thisSelector.fields, "_id" ); // _id field is mandatory
-			
 			_.each( thisSelector.fields, function( thisField ) {
-				projection[ thisField ] = true;
+				if( ( _this._normalizeId && thisField === 'id' ) || ( ! _this._normalizeId && thisField === '_id' ) ) return;
+
+				projection[ thisField ] = 1;
 			} );
 		}
 
-		var cursor = _this._collection.find( mongoQuery, projection );
+		var cursor = _this._collection.find( mongoQuery );
+		if( ! _.isEmpty( projection ) ) cursor.project( projection );
 		if( thisSelector.skip ) cursor.skip( thisSelector.skip );
 		if( thisSelector.limit ) cursor.limit( thisSelector.limit );
 		
-		cursor.toArray( function( err, records ) {
+		cursor.toArray( function( err, recordsFromThisSelector ) {
 			if( err ) return callback( err );
 
-			_.each( records, function( thisRecord ) {
+			_.each( recordsFromThisSelector, function( thisRecord ) {
 				var recordId = thisRecord._id;
 
-				recordsById[ recordId ] = recordsById[ recordId ] || {};
-				_.extend( recordsById[ recordId ], thisRecord );
+				if( _this._normalizeId && '_id' in thisRecord ) {
+					thisRecord.id = thisRecord._id;
+					delete thisRecord._id;
+				}
+
+				records.push( thisRecord );
 			} );
 
 			callback();
@@ -70,9 +99,7 @@ MongoCollectionContainer.prototype.stuff = function( callback ) {
 	}, function( err ) {
 		if( err ) return callback( err );
 
-		// now all records are in recordsById, but we want the final payload to be an array, not a hash
-		var containerContents = _.values( recordsById );
-		callback( null, containerContents );
+		callback( null, records );
 	} );
 };
 
