@@ -68,6 +68,8 @@ MongoCollectionContainer.prototype.stuff = function( callback ) {
 		var projection = {};
 
 		if( thisSelector.fields !== "*" ) {
+			thisSelector.fields = _.union( thisSelector.fields, [ _this._normalizeId ? 'id' : '_id' ] );
+			
 			_.each( thisSelector.fields, function( thisField ) {
 				if( ( _this._normalizeId && thisField === 'id' ) || ( ! _this._normalizeId && thisField === '_id' ) ) return;
 
