@@ -47,10 +47,16 @@ MongoCollectionContainer.prototype.stuff = function( callback ) {
 			var thisMongoQuery = _.reduce( Object.keys( thisWhere ), function( thisMongoQueryMemo, thisFieldName ) {
 				var thisFieldNameNormalized = thisFieldName === 'id' ? '_id' : thisFieldName;
 
-				if( _.isArray( thisWhere[ thisFieldName ] ) ) {
-					thisMongoQueryMemo[ thisFieldNameNormalized ] = { $in : thisWhere[ thisFieldName ] };
+				// test if we are using logical operators, in that case pass the query as is.
+				// see: https://docs.mongodb.com/manual/reference/operator/query-logical/
+				if( _.contains( [ '$or', '$and', '$not', '$nor' ], thisFieldName ) ) {
+					orClauses.push( thisWhere  );
 				} else {
-					thisMongoQueryMemo[ thisFieldNameNormalized ] = thisWhere[ thisFieldName ];
+					if( _.isArray( thisWhere[ thisFieldName ] ) ) {
+						thisMongoQueryMemo[ thisFieldNameNormalized ] = { $in : thisWhere[ thisFieldName ] };
+					} else {
+						thisMongoQueryMemo[ thisFieldNameNormalized ] = thisWhere[ thisFieldName ];
+					}
 				}
 
 				return thisMongoQueryMemo;
@@ -69,7 +75,7 @@ MongoCollectionContainer.prototype.stuff = function( callback ) {
 
 		if( thisSelector.fields !== "*" ) {
 			thisSelector.fields = _.union( thisSelector.fields, [ _this._normalizeId ? 'id' : '_id' ] );
-			
+
 			_.each( thisSelector.fields, function( thisField ) {
 				if( ( _this._normalizeId && thisField === 'id' ) || ( ! _this._normalizeId && thisField === '_id' ) ) return;
 
@@ -81,7 +87,7 @@ MongoCollectionContainer.prototype.stuff = function( callback ) {
 		if( ! _.isEmpty( projection ) ) cursor.project( projection );
 		if( thisSelector.skip ) cursor.skip( thisSelector.skip );
 		if( thisSelector.limit ) cursor.limit( thisSelector.limit );
-		
+
 		cursor.toArray( function( err, recordsFromThisSelector ) {
 			if( err ) return callback( err );
 
