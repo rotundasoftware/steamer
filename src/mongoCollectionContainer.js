@@ -69,7 +69,7 @@ MongoCollectionContainer.prototype.stuff = function( callback ) {
 
 		if( thisSelector.fields !== "*" ) {
 			thisSelector.fields = _.union( thisSelector.fields, [ _this._normalizeId ? 'id' : '_id' ] );
-			
+
 			_.each( thisSelector.fields, function( thisField ) {
 				if( ( _this._normalizeId && thisField === 'id' ) || ( ! _this._normalizeId && thisField === '_id' ) ) return;
 
@@ -81,13 +81,11 @@ MongoCollectionContainer.prototype.stuff = function( callback ) {
 		if( ! _.isEmpty( projection ) ) cursor.project( projection );
 		if( thisSelector.skip ) cursor.skip( thisSelector.skip );
 		if( thisSelector.limit ) cursor.limit( thisSelector.limit );
-		
+
 		cursor.toArray( function( err, recordsFromThisSelector ) {
 			if( err ) return callback( err );
 
 			_.each( recordsFromThisSelector, function( thisRecord ) {
-				var recordId = thisRecord._id;
-
 				if( _this._normalizeId && '_id' in thisRecord ) {
 					thisRecord.id = thisRecord._id;
 					delete thisRecord._id;
