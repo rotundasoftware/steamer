@@ -45,7 +45,7 @@ MongoCollectionContainer.prototype.stuff = function( callback ) {
 		if( ! _.isArray( where ) ) where = [ where ];
 		_.each( where, function( thisWhere ) {
 			var thisMongoQuery = _.reduce( Object.keys( thisWhere ), function( thisMongoQueryMemo, thisFieldName ) {
-				var thisFieldNameNormalized = thisFieldName === 'id' ? '_id' : thisFieldName;
+				var thisFieldNameNormalized = _this._normalizeId && thisFieldName === 'id' ? '_id' : thisFieldName;
 
 				if( _.isArray( thisWhere[ thisFieldName ] ) ) {
 					thisMongoQueryMemo[ thisFieldNameNormalized ] = { $in : thisWhere[ thisFieldName ] };
