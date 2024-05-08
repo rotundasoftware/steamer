@@ -19,9 +19,8 @@
       "url": "https://github.com/rotundasoftware/steamer/blob/master/LICENSE"
     }
   ],
-  "main": "src/steamer.js",
-  "engines": {
-    "node": ">= 0.8.0"
+  "exports": {
+    ".": "./index.mjs"
   },
   "keywords": [
     "synchronization",
@@ -30,9 +29,6 @@
     "middleware"
   ],
   "dependencies": {
-    "underscore": "^1.13.6",
-    "async": "*"
-  },
-  "devDependencies": {},
-  "optionalDependencies": {}
+    "@rotundasoftware/assert-type": "^6.0.0"
+  }
 }
