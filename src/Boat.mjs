@@ -25,6 +25,15 @@ export default class {
         } )
     }
 
+    addContainers( newContainers ) {
+        assertType( { newContainers }, 'object' );
+
+        this.#containers = {
+            ...this.#containers,
+            ...newContainers
+        };
+    }
+
     async stuff() {
         try {
             const containerNames = Object.keys( this.#containers );
