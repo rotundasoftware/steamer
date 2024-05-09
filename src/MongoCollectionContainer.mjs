@@ -7,7 +7,7 @@
 import _ from 'underscore';
 import async from 'async';
 
-MongoCollectionContainer = function( options ) {
+const MongoCollectionContainer = function( options ) {
 	this._collection = options.collection;
 	this._normalizeId = _.isUndefined( options.normalizeId ) ? false : options.normalizeId;
 	this._selectors = [];
