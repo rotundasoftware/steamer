@@ -5,7 +5,7 @@ export default class {
     #keys = [];
 
     constructor( hash = {} ) {
-        assertType( { containers }, 'object' );
+        assertType( { hash }, 'object' );
         
         this.#hash = hash;
     }
