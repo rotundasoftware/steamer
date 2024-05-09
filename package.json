@@ -1,7 +1,7 @@
 {
   "name": "@rotundasoftware/steamer",
   "description": "Send data to the client with less code and more clarity in your node.js applications.",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "author": {
     "name": "David Beck",
     "email": "david@rotundasoftware.com"
