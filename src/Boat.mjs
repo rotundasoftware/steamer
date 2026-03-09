@@ -20,7 +20,7 @@ export default class {
             if( container ) {
                 container.add( itemValue );
             } else {
-                this.#singleValues[ containerOrVariableName ] = itemValue;
+                this.#singleValues[ itemName ] = itemValue;
             }
         } )
     }
