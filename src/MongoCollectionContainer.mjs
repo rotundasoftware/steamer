@@ -5,7 +5,6 @@
  * http://github.com/rotundasoftware/steamer
 */
 import _ from 'underscore';
-import async from 'async';
 
 const MongoCollectionContainer = function( options ) {
 	this._collection = options.collection;
@@ -25,10 +24,26 @@ MongoCollectionContainer.prototype.reset = function() {
 };
 
 MongoCollectionContainer.prototype.stuff = function( callback ) {
-	var _this = this;
-	var records = [];
+	var stuffPromise = this._stuff();
 
-	async.each( this._selectors, function( thisSelector, callback ) {
+	if( _.isFunction( callback ) ) {
+		stuffPromise.then( function( records ) {
+			callback( null, records );
+		} ).catch( function( err ) {
+			callback( err );
+		} );
+
+		return;
+	}
+
+	return stuffPromise;
+};
+
+MongoCollectionContainer.prototype._stuff = async function() {
+	var _this = this;
+	var recordsBySelector = await Promise.all( this._selectors.map( async function( thisSelector ) {
+		var records = [];
+
 		thisSelector = _.extend( {
 			fields : [],
 			where : {},
@@ -81,25 +96,21 @@ MongoCollectionContainer.prototype.stuff = function( callback ) {
 		if( thisSelector.skip ) cursor.skip( thisSelector.skip );
 		if( thisSelector.limit ) cursor.limit( thisSelector.limit );
 
-		cursor.toArray( function( err, recordsFromThisSelector ) {
-			if( err ) return callback( err );
+		var recordsFromThisSelector = await cursor.toArray();
 
-			_.each( recordsFromThisSelector, function( thisRecord ) {
-				if( _this._normalizeId && '_id' in thisRecord ) {
-					thisRecord.id = thisRecord._id;
-					delete thisRecord._id;
-				}
+		_.each( recordsFromThisSelector, function( thisRecord ) {
+			if( _this._normalizeId && '_id' in thisRecord ) {
+				thisRecord.id = thisRecord._id;
+				delete thisRecord._id;
+			}
 
-				records.push( thisRecord );
-			} );
-
-			callback();
+			records.push( thisRecord );
 		} );
-	}, function( err ) {
-		if( err ) return callback( err );
 
-		callback( null, records );
-	} );
+		return records;
+	} ) );
+
+	return _.flatten( recordsBySelector, true );
 };
 
 export default MongoCollectionContainer;
